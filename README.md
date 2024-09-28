@@ -1,53 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Habit Tracker PWA</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 20px;
-            max-width: 800px;
-        }
-        h1, h2, h3 {
-            color: #333;
-        }
-        pre {
-            background-color: #f4f4f4;
-            padding: 10px;
-            border-left: 3px solid #ccc;
-            overflow-x: auto;
-        }
-        code {
-            background-color: #f4f4f4;
-            padding: 2px 4px;
-            border-radius: 4px;
-        }
-        a {
-            color: #1a0dab;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        ul {
-            list-style-type: disc;
-            margin-left: 20px;
-        }
-        blockquote {
-            border-left: 4px solid #ccc;
-            padding-left: 10px;
-            color: #555;
-            margin: 20px 0;
-        }
-    </style>
-</head>
-<body>
-    <h1>Habit Tracker PWA</h1>
-    <p>A simple Progressive Web App (PWA) to track daily habits, specifically <strong>Exercise</strong> and <strong>Walking</strong>. The app features a hexagonal calendar grid for six months, allowing users to mark habits as completed by interacting with the respective halves of each hexagon. It runs locally, works offline, and stores data using IndexedDB.</p>
+# Habit Tracker PWA
+
+A simple Progressive Web App (PWA) to track daily habits, specifically <strong>Exercise</strong> and <strong>Walking</strong>. The app features a hexagonal calendar grid for six months, allowing users to mark habits as completed by interacting with the respective halves of each hexagon. It runs locally, works offline, and stores data using IndexedDB.</p>
     
-    <h2>Features</h2>
+## Features
     <ul>
         <li><strong>Track Two Habits:</strong> Exercise and Walking.</li>
         <li><strong>Hexagonal Day Cells:</strong> Each day is represented by a hexagon divided into two equal parts for each habit.</li>
