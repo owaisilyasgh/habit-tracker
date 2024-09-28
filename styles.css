@@ -1,0 +1,109 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+}
+
+.month {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.month-header {
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 10px;
+}
+
+.day-cell {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* Square */
+    cursor: pointer;
+}
+
+.hexagon {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(
+        25% 5%, 
+        75% 5%, 
+        100% 50%, 
+        75% 95%, 
+        25% 95%, 
+        0% 50%
+    );
+    display: flex;
+    flex-direction: column;
+}
+
+.habit {
+    flex: 1;
+    border: 1px solid #ccc;
+    transition: background-color 0.3s;
+}
+
+.habit.exercise {
+    background-color: lightblue;
+}
+
+.habit.walking {
+    background-color: lightgreen;
+}
+
+.habit.exercise.completed {
+    background-color: blue;
+}
+
+.habit.walking.completed {
+    background-color: green;
+}
+
+.day-number {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    font-size: 12px;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+@media (max-width: 1200px) {
+    #calendar-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 800px) {
+    #calendar-grid {
+        grid-template-columns: 1fr;
+    }
+}
