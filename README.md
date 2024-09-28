@@ -3,21 +3,19 @@
 A simple Progressive Web App (PWA) to track daily habits, specifically <strong>Exercise</strong> and <strong>Walking</strong>. The app features a hexagonal calendar grid for six months, allowing users to mark habits as completed by interacting with the respective halves of each hexagon. It runs locally, works offline, and stores data using IndexedDB.</p>
     
 ## Features
-    <ul>
-        <li><strong>Track Two Habits:</strong> Exercise and Walking.</li>
-        <li><strong>Hexagonal Day Cells:</strong> Each day is represented by a hexagon divided into two equal parts for each habit.</li>
-        <li><strong>Toggle Completion:</strong> Click to select or deselect habit completion.</li>
-        <li><strong>Local Data Storage:</strong> Uses IndexedDB to persist data locally.</li>
-        <li><strong>Offline Functionality:</strong> Fully functional without an internet connection.</li>
-        <li><strong>Responsive Design:</strong> Optimized for desktop use.</li>
-    </ul>
+- Track Two Habits:</strong> Exercise and Walking.
+- Hexagonal Day Cells:</strong> Each day is represented by a hexagon divided into two equal parts for each habit.
+- Toggle Completion:</strong> Click to select or deselect habit completion.
+- Local Data Storage:</strong> Uses IndexedDB to persist data locally.
+- Offline Functionality:</strong> Fully functional without an internet connection.
+- Responsive Design:</strong> Optimized for desktop use.
     
-    <h2>Installation</h2>
+# Installation
     
-    <h3>Prerequisites</h3>
-    <ul>
-        <li>A modern web browser (e.g., Chrome, Firefox, Edge).</li>
-        <li>A local server to serve the application files.</li>
+## Prerequisites
+
+- A modern web browser (e.g., Chrome, Firefox, Edge).
+- - A local server to serve the application files.
     </ul>
     
     <h3>Steps</h3>
