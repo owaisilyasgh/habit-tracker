@@ -12,7 +12,7 @@ A simple Progressive Web App (PWA) to track daily habits, specifically <strong>E
 
     
 # Project Structure
-
+<code>
 habit-tracker/
 │
 ├── index.html         # Main HTML file
@@ -20,3 +20,4 @@ habit-tracker/
 ├── app.js             # JavaScript functionality
 ├── manifest.json      # PWA manifest
 └── service-worker.js  # Service Worker for offline support
+</code>
