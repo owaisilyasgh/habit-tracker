@@ -107,3 +107,15 @@ header {
         grid-template-columns: 1fr;
     }
 }
+
+@media (max-width: 600px) {
+    .days-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 400px) {
+    .days-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
