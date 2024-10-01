@@ -31,8 +31,8 @@ const currentMonth = today.getMonth(); // 0-indexed
 // Initialize Calendar for 6 months
 function initializeCalendar() {
     const calendarGrid = document.getElementById('calendar-grid');
-    for (let i = 0; i < 6; i++) {
-        const date = new Date(currentYear, currentMonth + i, 1);
+    for (let i = 5; i >= 0; i--) {
+        const date = new Date(currentYear, currentMonth - i, 1);
         const month = date.getMonth();
         const year = date.getFullYear();
         const monthName = date.toLocaleString('default', { month: 'long' });
