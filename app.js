@@ -1,3 +1,5 @@
+// app.js
+
 // Initialize IndexedDB
 let db;
 const request = indexedDB.open('HabitTrackerDB', 1);
@@ -28,7 +30,7 @@ const today = new Date();
 const currentYear = today.getFullYear();
 const currentMonth = today.getMonth(); // 0-indexed
 
-// Initialize Calendar for 6 months
+// Initialize Calendar for 6 months (5 past months + current month)
 function initializeCalendar() {
     const calendarGrid = document.getElementById('calendar-grid');
     for (let i = 5; i >= 0; i--) {
@@ -38,6 +40,9 @@ function initializeCalendar() {
         const monthName = date.toLocaleString('default', { month: 'long' });
         const monthElement = document.createElement('div');
         monthElement.classList.add('month');
+        if (month === currentMonth && year === currentYear) {
+            monthElement.id = 'current-month';
+        }
         const monthHeader = document.createElement('div');
         monthHeader.classList.add('month-header');
         monthHeader.textContent = `${monthName} ${year}`;
@@ -47,6 +52,23 @@ function initializeCalendar() {
         monthElement.appendChild(daysGrid);
         calendarGrid.appendChild(monthElement);
         populateDays(month, year, daysGrid);
+    }
+
+    // Scroll to current month near the bottom of the screen on mobile view
+    if (window.innerWidth <= 600) {
+        setTimeout(() => {
+            const currentMonthElement = document.getElementById('current-month');
+            if (currentMonthElement) {
+                const monthHeight = currentMonthElement.offsetHeight;
+                const rowsToLeave = 1; // Adjusted to leave space for 5 rows above
+                const scrollOffset = monthHeight * rowsToLeave;
+                const scrollPosition = currentMonthElement.offsetTop - scrollOffset;
+                window.scrollTo({
+                    top: scrollPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }, 100); // Delay to ensure rendering is complete
     }
 }
 
