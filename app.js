@@ -60,7 +60,7 @@ function initializeCalendar() {
             const currentMonthElement = document.getElementById('current-month');
             if (currentMonthElement) {
                 const monthHeight = currentMonthElement.offsetHeight;
-                const rowsToLeave = .9; // Adjusted to leave space for 5 rows above
+                const rowsToLeave = 0.5; // Adjusted to leave space for 5 rows above
                 const scrollOffset = monthHeight * rowsToLeave;
                 const scrollPosition = currentMonthElement.offsetTop - scrollOffset;
                 window.scrollTo({
