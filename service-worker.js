@@ -1,6 +1,6 @@
 // service-worker.js
 
-const CACHE_NAME = 'habit-tracker-cache-v3';
+const CACHE_NAME = 'habit-tracker-cache-v4';
 const urlsToCache = [
     '/habit-tracker/',
     '/habit-tracker/index.html',
