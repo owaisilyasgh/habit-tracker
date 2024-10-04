@@ -54,24 +54,16 @@ function initializeCalendar() {
         populateDays(month, year, daysGrid);
     }
 
-    // Scroll to current month near the bottom of the screen on mobile view
-    /*
-    if (window.innerWidth <= 600) {
-        setTimeout(() => {
-            const currentMonthElement = document.getElementById('current-month');
-            if (currentMonthElement) {
-                const monthHeight = currentMonthElement.offsetHeight;
-                const rowsToLeave = 1; // Adjusted to leave space for 5 rows above
-                const scrollOffset = monthHeight * rowsToLeave;
-                const scrollPosition = currentMonthElement.offsetTop - scrollOffset;
-                window.scrollTo({
-                    top: scrollPosition,
-                    behavior: 'smooth'
-                });
-            }
-        }, 100); // Delay to ensure rendering is complete
-    }
-    */
+    // Restore scroll position after calendar is rendered
+    setTimeout(() => {
+        const scrollPosition = localStorage.getItem('scrollPosition');
+        if (scrollPosition !== null) {
+            window.scrollTo({
+                top: parseInt(scrollPosition),
+                behavior: 'smooth'
+            });
+        }
+    }, 100); // Delay to ensure rendering is complete
 }
 
 // Populate days for a given month and year
@@ -115,13 +107,16 @@ function toggleHabitCompletion(year, month, day, habitName, habitDiv) {
         if (!data.days[day]) {
             data.days[day] = {};
         }
-        data.days[day][habitName] = !data.days[day][habitName];
+        const wasCompleted = data.days[day][habitName];
+        data.days[day][habitName] = !wasCompleted;
         saveMonthData(data);
         // Update UI
         if (data.days[day][habitName]) {
             habitDiv.classList.add('completed');
+            playSelectSound();
         } else {
             habitDiv.classList.remove('completed');
+            playDeselectSound();
         }
     });
 }
@@ -171,17 +166,21 @@ function loadHabitData(year, month, day, hexagon) {
     });
 }
 
-// Add scroll position saving and restoring
+// Add scroll position saving
 window.addEventListener('scroll', () => {
     localStorage.setItem('scrollPosition', window.scrollY);
 });
 
-window.addEventListener('load', () => {
-    const scrollPosition = localStorage.getItem('scrollPosition');
-    if (scrollPosition !== null) {
-        window.scrollTo({
-            top: parseInt(scrollPosition),
-            behavior: 'smooth'
-        });
-    }
-});
+// Audio setup
+const selectSound = new Audio('assets/sounds/select.mp3');
+const deselectSound = new Audio('assets/sounds/deselect.mp3');
+
+function playSelectSound() {
+    selectSound.currentTime = 0;
+    selectSound.play();
+}
+
+function playDeselectSound() {
+    deselectSound.currentTime = 0;
+    deselectSound.play();
+}
