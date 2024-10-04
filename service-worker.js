@@ -1,4 +1,6 @@
-const CACHE_NAME = 'habit-tracker-cache-v1';
+// service-worker.js
+
+const CACHE_NAME = 'habit-tracker-cache-v2';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -6,7 +8,9 @@ const urlsToCache = [
     '/app.js',
     '/manifest.json',
     '/icons/icon-192.png',
-    '/icons/icon-512.png'
+    '/icons/icon-512.png',
+    '/assets/sounds/select.mp3',
+    '/assets/sounds/deselect.mp3'
 ];
 
 // Install the Service Worker
@@ -14,26 +18,12 @@ self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
         .then(cache => {
-            console.log('Opened cache');
             return cache.addAll(urlsToCache);
         })
     );
 });
 
-// Cache and return requests
-self.addEventListener('fetch', event => {
-    event.respondWith(
-        caches.match(event.request)
-        .then(response => {
-            if (response) {
-                return response;
-            }
-            return fetch(event.request);
-        })
-    );
-});
-
-// Update the Service Worker
+// Activate the Service Worker
 self.addEventListener('activate', event => {
     const cacheWhitelist = [CACHE_NAME];
     event.waitUntil(
@@ -47,4 +37,21 @@ self.addEventListener('activate', event => {
             );
         })
     );
+});
+
+// Fetch and respond with cached resources or fetch from network
+self.addEventListener('fetch', event => {
+    if (event.request.mode === 'navigate') {
+        event.respondWith(
+            caches.match('/index.html').then(response => {
+                return response || fetch('/index.html');
+            })
+        );
+    } else {
+        event.respondWith(
+            caches.match(event.request).then(response => {
+                return response || fetch(event.request);
+            })
+        );
+    }
 });
