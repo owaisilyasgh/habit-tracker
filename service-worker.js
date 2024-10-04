@@ -1,16 +1,16 @@
 // service-worker.js
 
-const CACHE_NAME = 'habit-tracker-cache-v2';
+const CACHE_NAME = 'habit-tracker-cache-v3';
 const urlsToCache = [
-    '/',
-    '/index.html',
-    '/styles.css',
-    '/app.js',
-    '/manifest.json',
-    '/icons/icon-192.png',
-    '/icons/icon-512.png',
-    '/assets/sounds/select.mp3',
-    '/assets/sounds/deselect.mp3'
+    '/habit-tracker/',
+    '/habit-tracker/index.html',
+    '/habit-tracker/styles.css',
+    '/habit-tracker/app.js',
+    '/habit-tracker/manifest.json',
+    '/habit-tracker/icons/icon-192.png',
+    '/habit-tracker/icons/icon-512.png',
+    '/habit-tracker/assets/sounds/select.mp3',
+    '/habit-tracker/assets/sounds/deselect.mp3'
 ];
 
 // Install the Service Worker
@@ -43,8 +43,8 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
     if (event.request.mode === 'navigate') {
         event.respondWith(
-            caches.match('/index.html').then(response => {
-                return response || fetch('/index.html');
+            caches.match('/habit-tracker/index.html').then(response => {
+                return response || fetch('/habit-tracker/index.html');
             })
         );
     } else {
