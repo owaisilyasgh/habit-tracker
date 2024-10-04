@@ -55,12 +55,13 @@ function initializeCalendar() {
     }
 
     // Scroll to current month near the bottom of the screen on mobile view
+    /*
     if (window.innerWidth <= 600) {
         setTimeout(() => {
             const currentMonthElement = document.getElementById('current-month');
             if (currentMonthElement) {
                 const monthHeight = currentMonthElement.offsetHeight;
-                const rowsToLeave = 0.9; // Adjusted to leave space for 5 rows above
+                const rowsToLeave = 1; // Adjusted to leave space for 5 rows above
                 const scrollOffset = monthHeight * rowsToLeave;
                 const scrollPosition = currentMonthElement.offsetTop - scrollOffset;
                 window.scrollTo({
@@ -70,6 +71,7 @@ function initializeCalendar() {
             }
         }, 100); // Delay to ensure rendering is complete
     }
+    */
 }
 
 // Populate days for a given month and year
@@ -168,3 +170,18 @@ function loadHabitData(year, month, day, hexagon) {
         }
     });
 }
+
+// Add scroll position saving and restoring
+window.addEventListener('scroll', () => {
+    localStorage.setItem('scrollPosition', window.scrollY);
+});
+
+window.addEventListener('load', () => {
+    const scrollPosition = localStorage.getItem('scrollPosition');
+    if (scrollPosition !== null) {
+        window.scrollTo({
+            top: parseInt(scrollPosition),
+            behavior: 'smooth'
+        });
+    }
+});
