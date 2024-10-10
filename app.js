@@ -219,4 +219,3 @@ window.addEventListener('appinstalled', () => {
     document.getElementById('install-button').style.display = 'none';
     console.log('PWA installed successfully!');
 });
-
