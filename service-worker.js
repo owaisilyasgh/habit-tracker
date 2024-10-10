@@ -6,11 +6,7 @@ const urlsToCache = [
     '/habit-tracker/index.html',
     '/habit-tracker/styles.css',
     '/habit-tracker/app.js',
-    '/habit-tracker/manifest.json',
-    '/habit-tracker/icons/icon-192.png',
-    '/habit-tracker/icons/icon-512.png',
-    '/habit-tracker/assets/sounds/select.mp3',
-    '/habit-tracker/assets/sounds/deselect.mp3'
+    '/habit-tracker/manifest.json'
 ];
 
 // Install the Service Worker
