@@ -113,10 +113,8 @@ function toggleHabitCompletion(year, month, day, habitName, habitDiv) {
         // Update UI
         if (data.days[day][habitName]) {
             habitDiv.classList.add('completed');
-            playSelectSound();
         } else {
             habitDiv.classList.remove('completed');
-            playDeselectSound();
         }
     });
 }
@@ -171,16 +169,35 @@ window.addEventListener('scroll', () => {
     localStorage.setItem('scrollPosition', window.scrollY);
 });
 
-// Audio setup
-const selectSound = new Audio('assets/sounds/select.mp3');
-const deselectSound = new Audio('assets/sounds/deselect.mp3');
+// Add PWA install functionality
+let deferredPrompt;
 
-function playSelectSound() {
-    selectSound.currentTime = 0;
-    selectSound.play();
-}
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent the mini-infobar from appearing on mobile
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e;
+    // Update UI to show the install button
+    const installButton = document.getElementById('install-button');
+    installButton.style.display = 'block';
 
-function playDeselectSound() {
-    deselectSound.currentTime = 0;
-    deselectSound.play();
-}
+    installButton.addEventListener('click', () => {
+        // Hide the install button
+        installButton.style.display = 'none';
+        // Show the install prompt
+        deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            } else {
+                console.log('User dismissed the install prompt');
+            }
+            deferredPrompt = null;
+        });
+    });
+});
+
+window.addEventListener('appinstalled', () => {
+    console.log('PWA installed successfully!');
+});
