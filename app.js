@@ -113,10 +113,8 @@ function toggleHabitCompletion(year, month, day, habitName, habitDiv) {
         // Update UI
         if (data.days[day][habitName]) {
             habitDiv.classList.add('completed');
-            playSelectSound();
         } else {
             habitDiv.classList.remove('completed');
-            playDeselectSound();
         }
     });
 }
@@ -170,20 +168,6 @@ function loadHabitData(year, month, day, hexagon) {
 window.addEventListener('scroll', () => {
     localStorage.setItem('scrollPosition', window.scrollY);
 });
-
-// Audio setup
-const selectSound = new Audio('assets/sounds/select.mp3');
-const deselectSound = new Audio('assets/sounds/deselect.mp3');
-
-function playSelectSound() {
-    selectSound.currentTime = 0;
-    selectSound.play();
-}
-
-function playDeselectSound() {
-    deselectSound.currentTime = 0;
-    deselectSound.play();
-}
 
 // Add PWA install functionality
 let deferredPrompt;
