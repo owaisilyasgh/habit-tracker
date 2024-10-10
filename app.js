@@ -199,7 +199,5 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 window.addEventListener('appinstalled', () => {
-    // Hide the install button if the app is already installed
-    document.getElementById('install-button').style.display = 'none';
     console.log('PWA installed successfully!');
 });
