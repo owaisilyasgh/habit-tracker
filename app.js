@@ -78,14 +78,15 @@ function initializeCalendar() {
     }, 100); // Delay to ensure rendering is complete
 }
 
-// Populate days for a given month and year (rest of original content)
-month, year, container) {
+// Populate days for a given month and year
+function populateDays(month, year, container) {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     for (let day = 1; day <= daysInMonth; day++) {
         const dayCell = document.createElement('div');
         dayCell.classList.add('day-cell');
         const hexagon = document.createElement('div');
         hexagon.classList.add('hexagon');
+        
         // Create habit halves
         habits.forEach(habit => {
             const habitDiv = document.createElement('div');
@@ -97,38 +98,20 @@ month, year, container) {
             });
             hexagon.appendChild(habitDiv);
         });
+
         // Add day number
         const dayNumber = document.createElement('div');
         dayNumber.classList.add('day-number');
         dayNumber.textContent = day;
+
+        // Append elements correctly to day cell
         dayCell.appendChild(hexagon);
         dayCell.appendChild(dayNumber);
         container.appendChild(dayCell);
+
         // Load saved data
         loadHabitData(year, month, day, hexagon);
     }
-}
-
-// Toggle habit completion
-function toggleHabitCompletion(year, month, day, habitName, habitDiv) {
-    const monthKey = `${year}-${month + 1}`;
-    getMonthData(monthKey, (data) => {
-        if (!data) {
-            data = { month: monthKey, days: {} };
-        }
-        if (!data.days[day]) {
-            data.days[day] = {};
-        }
-        const wasCompleted = data.days[day][habitName];
-        data.days[day][habitName] = !wasCompleted;
-        saveMonthData(data);
-        // Update UI
-        if (data.days[day][habitName]) {
-            habitDiv.classList.add('completed');
-        } else {
-            habitDiv.classList.remove('completed');
-        }
-    });
 }
 
 // Save data to IndexedDB
@@ -143,6 +126,9 @@ function saveMonthData(data) {
     request.onsuccess = function() {
         console.log(`Data for ${data.month} saved successfully.`);
     };
+}
+
+// Rest of original app.js content remains unchanged
     request.onerror = function(event) {
         console.error('Error saving data:', event.target.errorCode);
     };
