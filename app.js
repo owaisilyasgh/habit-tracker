@@ -1,6 +1,4 @@
 
-// app.js 
-
 // Initialize IndexedDB
 let db;
 const request = indexedDB.open('HabitTrackerDB', 1);
@@ -17,6 +15,7 @@ request.onupgradeneeded = function(event) {
 
 request.onsuccess = function(event) {
     db = event.target.result;
+    console.info('Database opened successfully:', event);
     initializeCalendar();
 };
 
@@ -33,6 +32,7 @@ const currentMonth = today.getMonth(); // 0-indexed
 
 // Initialize Calendar for 6 months (5 past months + current month)
 function initializeCalendar() {
+    console.debug('Initializing calendar...');
     const calendarGrid = document.getElementById('calendar-grid');
     for (let i = 5; i >= 0; i--) {
         const date = new Date(currentYear, currentMonth - i, 1);
@@ -52,10 +52,22 @@ function initializeCalendar() {
         monthElement.appendChild(monthHeader);
         monthElement.appendChild(daysGrid);
         calendarGrid.appendChild(monthElement);
+        console.debug('Populating days for:', year, month + 1);
         populateDays(month, year, daysGrid);
     }
 
     // Restore scroll position after calendar is rendered
+    setTimeout(() => {
+        const scrollPosition = localStorage.getItem('scrollPosition');
+        if (scrollPosition !== null) {
+            window.scrollTo({
+                top: parseInt(scrollPosition),
+                behavior: 'smooth'
+            });
+        }
+    }, 100); // Delay to ensure rendering is complete
+}
+ after calendar is rendered
     setTimeout(() => {
         const scrollPosition = localStorage.getItem('scrollPosition');
         if (scrollPosition !== null) {
