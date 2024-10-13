@@ -1,6 +1,4 @@
 
-// app.js 
-
 // Initialize IndexedDB
 let db;
 const request = indexedDB.open('HabitTrackerDB', 1);
@@ -17,14 +15,8 @@ request.onupgradeneeded = function(event) {
 
 request.onsuccess = function(event) {
     db = event.target.result;
-    
-    try {
-        initializeCalendar();
-        console.info('Calendar initialized successfully.');
-    } catch (error) {
-        console.error('Error initializing calendar:', error);
-    }
-    
+    console.info('Database opened successfully:', event);
+    initializeCalendar();
 };
 
 // Define the habits
@@ -40,7 +32,18 @@ const currentMonth = today.getMonth(); // 0-indexed
 
 // Initialize Calendar for 6 months (5 past months + current month)
 function initializeCalendar() {
+    if (!db) {
+        console.error('Database is not initialized yet. Retrying...');
+        setTimeout(initializeCalendar, 100); // Retry after a short delay
+        return;
+    }
+
+    console.debug('Initializing calendar...');
     const calendarGrid = document.getElementById('calendar-grid');
+    if (!calendarGrid) {
+        console.error('Calendar grid element not found.');
+        return;
+    }
     for (let i = 5; i >= 0; i--) {
         const date = new Date(currentYear, currentMonth - i, 1);
         const month = date.getMonth();
@@ -59,6 +62,7 @@ function initializeCalendar() {
         monthElement.appendChild(monthHeader);
         monthElement.appendChild(daysGrid);
         calendarGrid.appendChild(monthElement);
+        console.debug('Populating days for:', year, month + 1);
         populateDays(month, year, daysGrid);
     }
 
@@ -74,8 +78,8 @@ function initializeCalendar() {
     }, 100); // Delay to ensure rendering is complete
 }
 
-// Populate days for a given month and year
-function populateDays(month, year, container) {
+// Populate days for a given month and year (rest of original content unchanged)
+month, year, container) {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     for (let day = 1; day <= daysInMonth; day++) {
         const dayCell = document.createElement('div');
