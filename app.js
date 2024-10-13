@@ -15,7 +15,7 @@ request.onupgradeneeded = function(event) {
 
 request.onsuccess = function(event) {
     db = event.target.result;
-    console.info('Database opened successfully:', event);
+    console.info('Database opened successfully');
     initializeCalendar();
 };
 
@@ -78,7 +78,7 @@ function initializeCalendar() {
     }, 100); // Delay to ensure rendering is complete
 }
 
-// Populate days for a given month and year (rest of original content unchanged)
+// Rest of original app.js content
 month, year, container) {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     for (let day = 1; day <= daysInMonth; day++) {
@@ -255,12 +255,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Initialize the calendar (restore main content)
-    
-    try {
-        initializeCalendar();
-        console.info('Calendar initialized successfully.');
-    } catch (error) {
-        console.error('Error initializing calendar:', error);
-    }
-    
+    initializeCalendar();
 });
