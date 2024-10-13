@@ -17,7 +17,14 @@ request.onupgradeneeded = function(event) {
 
 request.onsuccess = function(event) {
     db = event.target.result;
-    initializeCalendar();
+    
+    try {
+        initializeCalendar();
+        console.info('Calendar initialized successfully.');
+    } catch (error) {
+        console.error('Error initializing calendar:', error);
+    }
+    
 };
 
 // Define the habits
@@ -32,48 +39,13 @@ const currentYear = today.getFullYear();
 const currentMonth = today.getMonth(); // 0-indexed
 
 // Initialize Calendar for 6 months (5 past months + current month)
-
 function initializeCalendar() {
-    console.debug('Initializing calendar...');
     const calendarGrid = document.getElementById('calendar-grid');
-    if (!calendarGrid) {
-        console.error('Calendar grid element not found.');
-        return;
-    }
     for (let i = 5; i >= 0; i--) {
         const date = new Date(currentYear, currentMonth - i, 1);
         const month = date.getMonth();
         const year = date.getFullYear();
         const monthName = date.toLocaleString('default', { month: 'long' });
-        const monthElement = document.createElement('div');
-        monthElement.classList.add('month');
-        if (month === currentMonth && year === currentYear) {
-            monthElement.id = 'current-month';
-        }
-        const monthHeader = document.createElement('div');
-        monthHeader.classList.add('month-header');
-        monthHeader.textContent = `${monthName} ${year}`;
-        const daysGrid = document.createElement('div');
-        daysGrid.classList.add('days-grid');
-        monthElement.appendChild(monthHeader);
-        monthElement.appendChild(daysGrid);
-        calendarGrid.appendChild(monthElement);
-        console.debug('Populating days for:', year, month + 1);
-        populateDays(month, year, daysGrid);
-    }
-
-    // Restore scroll position after calendar is rendered
-    setTimeout(() => {
-        const scrollPosition = localStorage.getItem('scrollPosition');
-        if (scrollPosition !== null) {
-            window.scrollTo({
-                top: parseInt(scrollPosition),
-                behavior: 'smooth'
-            });
-        }
-    }, 100); // Delay to ensure rendering is complete
-}
-);
         const monthElement = document.createElement('div');
         monthElement.classList.add('month');
         if (month === currentMonth && year === currentYear) {
@@ -279,5 +251,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Initialize the calendar (restore main content)
-    initializeCalendar();
+    
+    try {
+        initializeCalendar();
+        console.info('Calendar initialized successfully.');
+    } catch (error) {
+        console.error('Error initializing calendar:', error);
+    }
+    
 });
