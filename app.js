@@ -122,6 +122,10 @@ function toggleHabitCompletion(year, month, day, habitName, habitDiv) {
 
 // Save data to IndexedDB
 function saveMonthData(data) {
+    if (!db) {
+        console.error('Database is not initialized');
+        return;
+    }
     const transaction = db.transaction(['habits'], 'readwrite');
     const objectStore = transaction.objectStore('habits');
     const request = objectStore.put(data);
@@ -135,6 +139,10 @@ function saveMonthData(data) {
 
 // Get data from IndexedDB
 function getMonthData(monthKey, callback) {
+    if (!db) {
+        console.error('Database is not initialized');
+        return;
+    }
     const transaction = db.transaction(['habits'], 'readonly');
     const objectStore = transaction.objectStore('habits');
     const request = objectStore.get(monthKey);
