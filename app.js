@@ -202,7 +202,36 @@ window.addEventListener('appinstalled', () => {
     console.log('PWA installed successfully!');
 });
 
-// Toggle between hexagon and pentagon views
+// Render Group Activity 2 (Circle with 5 wedges)
+function renderGroupActivity2Grid() {
+    const calendarGrid = document.getElementById('calendar-grid');
+    calendarGrid.innerHTML = ''; // Clear the grid
+
+    for (let i = 1; i <= 31; i++) {
+        const dayCell = document.createElement('div');
+        dayCell.classList.add('day-cell');
+        const circle = document.createElement('div');
+        circle.classList.add('circle');
+
+        // Create 5 wedge segments
+        for (let j = 1; j <= 5; j++) {
+            const wedge = document.createElement('div');
+            wedge.classList.add(`wedge-${j}`);
+            circle.appendChild(wedge);
+        }
+
+        // Add day number
+        const dayNumber = document.createElement('div');
+        dayNumber.classList.add('day-number');
+        dayNumber.textContent = i;
+
+        dayCell.appendChild(circle);
+        dayCell.appendChild(dayNumber);
+        calendarGrid.appendChild(dayCell);
+    }
+}
+
+// Modify the toggle switch logic to reflect "Group Activity 2"
 document.getElementById('toggle-switch').addEventListener('change', (event) => {
     const selectedView = event.target.value;
     const calendarGrid = document.getElementById('calendar-grid');
@@ -211,51 +240,22 @@ document.getElementById('toggle-switch').addEventListener('change', (event) => {
     // Clear the existing grid before rendering the new view
     calendarGrid.innerHTML = '';
 
-    if (selectedView === 'pentagon') {
-        // Switch to pentagon view and apply dark theme
+    if (selectedView === 'group-activity-2') {
+        // Switch to Group Activity 2 (Circle view) and apply dark theme
         document.body.classList.remove('hexagon-theme');
-        document.body.classList.add('pentagon-theme');
+        document.body.classList.add('pentagon-theme'); // Reuse the dark theme
         calendarGrid.classList.remove('hexagon-grid');
-        calendarGrid.classList.add('pentagon-grid');
+        calendarGrid.classList.add('circle-grid'); // New class for circle grid
         header.classList.add('pentagon-theme');
-        renderPentagonGrid();  // Render pentagons
+        renderGroupActivity2Grid();  // Render circles with 5 wedges
     } else {
         // Switch back to hexagon view and revert to light theme
         document.body.classList.remove('pentagon-theme');
         document.body.classList.add('hexagon-theme');
-        calendarGrid.classList.remove('pentagon-grid');
+        calendarGrid.classList.remove('circle-grid');
         calendarGrid.classList.add('hexagon-grid');
         header.classList.remove('pentagon-theme');
         initializeCalendar();  // Re-render hexagon view
     }
 });
 
-
-// Render pentagon grid
-function renderPentagonGrid() {
-    const calendarGrid = document.getElementById('calendar-grid');
-    calendarGrid.innerHTML = ''; // Clear the grid
-
-    for (let i = 1; i <= 31; i++) {
-        const dayCell = document.createElement('div');
-        dayCell.classList.add('day-cell');
-        const pentagon = document.createElement('div');
-        pentagon.classList.add('pentagon');
-
-        // Create triangles inside the pentagon
-        for (let j = 1; j <= 5; j++) {
-            const triangle = document.createElement('div');
-            triangle.classList.add(`triangle-${j}`);
-            pentagon.appendChild(triangle);
-        }
-
-        // Add day number
-        const dayNumber = document.createElement('div');
-        dayNumber.classList.add('day-number');
-        dayNumber.textContent = i;
-
-        dayCell.appendChild(pentagon);
-        dayCell.appendChild(dayNumber);
-        calendarGrid.appendChild(dayCell);
-    }
-}
