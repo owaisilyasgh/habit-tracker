@@ -1,4 +1,6 @@
 
+// app.js 
+
 // Initialize IndexedDB
 let db;
 const request = indexedDB.open('HabitTrackerDB', 1);
@@ -32,7 +34,6 @@ const currentMonth = today.getMonth(); // 0-indexed
 // Initialize Calendar for 6 months (5 past months + current month)
 function initializeCalendar() {
     const calendarGrid = document.getElementById('calendar-grid');
-    calendarGrid.innerHTML = ''; // Clear any previous content
     for (let i = 5; i >= 0; i--) {
         const date = new Date(currentYear, currentMonth - i, 1);
         const month = date.getMonth();
@@ -53,6 +54,17 @@ function initializeCalendar() {
         calendarGrid.appendChild(monthElement);
         populateDays(month, year, daysGrid);
     }
+
+    // Restore scroll position after calendar is rendered
+    setTimeout(() => {
+        const scrollPosition = localStorage.getItem('scrollPosition');
+        if (scrollPosition !== null) {
+            window.scrollTo({
+                top: parseInt(scrollPosition),
+                behavior: 'smooth'
+            });
+        }
+    }, 100); // Delay to ensure rendering is complete
 }
 
 // Populate days for a given month and year
@@ -110,6 +122,10 @@ function toggleHabitCompletion(year, month, day, habitName, habitDiv) {
 
 // Save data to IndexedDB
 function saveMonthData(data) {
+    if (!db) {
+        console.error('Database is not initialized');
+        return;
+    }
     const transaction = db.transaction(['habits'], 'readwrite');
     const objectStore = transaction.objectStore('habits');
     const request = objectStore.put(data);
@@ -123,6 +139,10 @@ function saveMonthData(data) {
 
 // Get data from IndexedDB
 function getMonthData(monthKey, callback) {
+    if (!db) {
+        console.error('Database is not initialized');
+        return;
+    }
     const transaction = db.transaction(['habits'], 'readonly');
     const objectStore = transaction.objectStore('habits');
     const request = objectStore.get(monthKey);
@@ -158,6 +178,39 @@ window.addEventListener('scroll', () => {
     localStorage.setItem('scrollPosition', window.scrollY);
 });
 
+// Add PWA install functionality
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent the mini-infobar from appearing on mobile
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e;
+    // Update UI to show the install button
+    const installButton = document.getElementById('install-button');
+    installButton.style.display = 'block';
+
+    installButton.addEventListener('click', () => {
+        // Hide the install button
+        installButton.style.display = 'none';
+        // Show the install prompt
+        deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            } else {
+                console.log('User dismissed the install prompt');
+            }
+            deferredPrompt = null;
+        });
+    });
+});
+
+window.addEventListener('appinstalled', () => {
+    console.log('PWA installed successfully!');
+});
+
 // Modal functionality
 document.addEventListener('DOMContentLoaded', function () {
     const settingsGear = document.getElementById('settings-gear');
@@ -186,8 +239,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 settingsModal.style.display = 'none'; // Hide if clicking outside modal content
             }
         });
+    } else {
+        console.error('Required modal elements not found.');
     }
 
-    // Initialize the calendar
+    // Initialize the calendar (restore main content)
     initializeCalendar();
 });

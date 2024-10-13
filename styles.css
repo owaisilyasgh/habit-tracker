@@ -11,7 +11,7 @@
 }
 
 .gear-icon svg {
-    width: 27.6px; /* 15% larger than original */
+    width: 27.6px;  /* 15% larger than 24px */
     height: 27.6px;
     fill: white;
 }
@@ -37,8 +37,8 @@
     background-color: white;
     padding: 20px;
     border-radius: 10px;
-    width: 90%;  /* Modal size increased for better visibility */
-    max-width: 500px; /* Increased maximum width for larger screens */
+    width: 80%;
+    max-width: 400px;
     text-align: center;
 }
 
@@ -48,4 +48,245 @@
     right: 15px;
     font-size: 24px;
     cursor: pointer;
+}
+
+.gear-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1001; /* Higher than modal */
+}
+
+.gear-icon svg {
+    width: 40px;
+    height: 40px;
+    fill: white;
+}
+
+.gear-icon:hover {
+    background-color: #388E3C;
+}
+/* styles.css */
+
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    padding: 20px;
+    overflow-y: auto; /* Ensure body can scroll */
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+}
+
+.month {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.month-header {
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 10px;
+}
+
+.day-cell {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* Square */
+    cursor: pointer;
+}
+
+.hexagon {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(
+        25% 5%, 
+        75% 5%, 
+        100% 50%, 
+        75% 95%, 
+        25% 95%, 
+        0% 50%
+    );
+    display: flex;
+    flex-direction: column;
+}
+
+.habit {
+    flex: 1;
+    border: 1px solid #ccc;
+    transition: background-color 0.3s;
+}
+
+.habit.exercise {
+    background-color: lightblue;
+}
+
+.habit.walking {
+    background-color: lightgreen;
+}
+
+.habit.exercise.completed {
+    background-color: blue;
+}
+
+.habit.walking.completed {
+    background-color: green;
+}
+
+.day-number {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    font-size: 12px;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+#install-button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none; /* Initially hidden */
+}
+
+@media (max-width: 1200px) {
+    #calendar-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 800px) {
+    #calendar-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .days-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 400px) {
+    .days-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Modal overlay styling */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000; /* Ensures it's above other content */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal content box styling */
+.modal-content {
+    background-color: white;
+    width: 80%; /* Covers 80% of the viewport width on smaller screens */
+    max-width: 400px;
+    height: 80%;
+    padding: 20px;
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+/* 'X' close button */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+@media (min-width: 600px) {
+    /* Modal adjustment for larger screens */
+    .modal-content {
+        width: 60%;
+        height: 60%;
+    }
+}
+
+/* Floating gear icon */
+.gear-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1001; /* Higher than modal */
+}
+
+.gear-icon svg {
+    width: 40px;
+    height: 40px;
+    fill: white;
+    display: block;
+    margin: 0;
+    padding: 5px;
+    box-sizing: border-box;
+}
+.gear-icon {
+    background-color: #4CAF50;
+    border-radius: 50%;
+    padding: 10px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+
+.gear-icon:hover {
+    background-color: #388E3C;
 }
