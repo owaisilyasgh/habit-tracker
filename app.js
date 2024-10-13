@@ -1,21 +1,9 @@
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    // Event listener for settings button to open modal
-    const settingsButton = document.getElementById('settings-button');
-    if (settingsButton) {
-        settingsButton.addEventListener('click', () => {
-            const settingsModal = document.getElementById('settings-modal');
-            if (settingsModal) {
-                settingsModal.style.display = 'block';
-            }
-        });
+
     }
 
     // Close modal when clicking outside or on the close button
-    const closeButton = document.getElementById('close-modal');
-    if (closeButton) {
-        closeButton.addEventListener('click', () => {
-            const settingsModal = document.getElementById('settings-modal');
+    
             if (settingsModal) {
                 settingsModal.style.display = 'none';
             }
@@ -188,15 +176,7 @@ function toggleHabitCompletion(year, month, day, habitName, element) {
     });
 }
 
-// Event listener for settings button to open modal
-document.getElementById('settings-button').addEventListener('click', () => {
-    const settingsModal = document.getElementById('settings-modal');
-    if (settingsModal) {
-        settingsModal.style.display = 'block';
-    }
-});
 
-// Close modal when clicking outside or on the close button
 document.addEventListener('click', (event) => {
     const settingsModal = document.getElementById('settings-modal');
     if (settingsModal && event.target === settingsModal) {
