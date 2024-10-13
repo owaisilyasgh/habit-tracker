@@ -229,3 +229,31 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+// Ensure that modal is properly shown when clicking the gear icon
+document.addEventListener('DOMContentLoaded', function () {
+    const settingsGear = document.getElementById('settings-gear');
+    const settingsModal = document.getElementById('settings-modal');
+    const closeButton = document.querySelector('.close-button');
+
+    // Ensure modal is shown when clicking on gear icon
+    if (settingsGear) {
+        settingsGear.addEventListener('click', () => {
+            settingsModal.style.display = 'flex'; // Show the modal
+        });
+    }
+
+    // Ensure modal is closed when clicking on close button
+    if (closeButton) {
+        closeButton.addEventListener('click', () => {
+            settingsModal.style.display = 'none'; // Hide the modal
+        });
+    }
+
+    // Optionally, close the modal when clicking outside the modal content
+    window.addEventListener('click', (event) => {
+        if (event.target === settingsModal) {
+            settingsModal.style.display = 'none'; // Hide the modal
+        }
+    });
+});
