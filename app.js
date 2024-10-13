@@ -1,16 +1,4 @@
-
-
-    }
-
-    // Close modal when clicking outside or on the close button
-    
-            if (settingsModal) {
-                settingsModal.style.display = 'none';
-            }
-        });
-    }
-});
-
+// app.js 
 
 // Initialize IndexedDB
 let db;
@@ -28,7 +16,6 @@ request.onupgradeneeded = function(event) {
 
 request.onsuccess = function(event) {
     db = event.target.result;
-    console.info('Database opened successfully');
     initializeCalendar();
 };
 
@@ -45,23 +32,11 @@ const currentMonth = today.getMonth(); // 0-indexed
 
 // Initialize Calendar for 6 months (5 past months + current month)
 function initializeCalendar() {
-    if (!db) {
-        console.error('Database is not initialized yet. Retrying...');
-        setTimeout(initializeCalendar, 100); // Retry after a short delay
-        return;
-    }
-
-    console.debug('Initializing calendar...');
     const calendarGrid = document.getElementById('calendar-grid');
-    if (!calendarGrid) {
-        console.error('Calendar grid element not found.');
-        return;
-    }
     for (let i = 5; i >= 0; i--) {
         const date = new Date(currentYear, currentMonth - i, 1);
         const month = date.getMonth();
         const year = date.getFullYear();
-        const monthKey = `${year}-${month}`;
         const monthName = date.toLocaleString('default', { month: 'long' });
         const monthElement = document.createElement('div');
         monthElement.classList.add('month');
@@ -76,10 +51,7 @@ function initializeCalendar() {
         monthElement.appendChild(monthHeader);
         monthElement.appendChild(daysGrid);
         calendarGrid.appendChild(monthElement);
-        console.debug('Populating days for:', year, month + 1);
-        getMonthData(monthKey, (data) => {
-            populateDays(month, year, daysGrid, data);
-        });
+        populateDays(month, year, daysGrid);
     }
 
     // Restore scroll position after calendar is rendered
@@ -95,52 +67,65 @@ function initializeCalendar() {
 }
 
 // Populate days for a given month and year
-function populateDays(month, year, container, monthData) {
+function populateDays(month, year, container) {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     for (let day = 1; day <= daysInMonth; day++) {
         const dayCell = document.createElement('div');
         dayCell.classList.add('day-cell');
         const hexagon = document.createElement('div');
         hexagon.classList.add('hexagon');
-        
         // Create habit halves
         habits.forEach(habit => {
             const habitDiv = document.createElement('div');
             habitDiv.classList.add('habit', habit.name);
             habitDiv.dataset.habit = habit.name;
-            if (monthData && monthData[`${day}-${habit.name}`]) {
-                habitDiv.classList.add('completed');
-            }
             habitDiv.addEventListener('click', (e) => {
                 e.stopPropagation();
                 toggleHabitCompletion(year, month, day, habit.name, habitDiv);
             });
             hexagon.appendChild(habitDiv);
         });
-
         // Add day number
         const dayNumber = document.createElement('div');
         dayNumber.classList.add('day-number');
         dayNumber.textContent = day;
-
-        // Append elements correctly to day cell
         dayCell.appendChild(hexagon);
         dayCell.appendChild(dayNumber);
         container.appendChild(dayCell);
+        // Load saved data
+        loadHabitData(year, month, day, hexagon);
     }
 }
 
+// Toggle habit completion
+function toggleHabitCompletion(year, month, day, habitName, habitDiv) {
+    const monthKey = `${year}-${month + 1}`;
+    getMonthData(monthKey, (data) => {
+        if (!data) {
+            data = { month: monthKey, days: {} };
+        }
+        if (!data.days[day]) {
+            data.days[day] = {};
+        }
+        const wasCompleted = data.days[day][habitName];
+        data.days[day][habitName] = !wasCompleted;
+        saveMonthData(data);
+        // Update UI
+        if (data.days[day][habitName]) {
+            habitDiv.classList.add('completed');
+        } else {
+            habitDiv.classList.remove('completed');
+        }
+    });
+}
+
 // Save data to IndexedDB
-function saveMonthData(monthKey, data) {
-    if (!db) {
-        console.error('Database is not initialized');
-        return;
-    }
+function saveMonthData(data) {
     const transaction = db.transaction(['habits'], 'readwrite');
     const objectStore = transaction.objectStore('habits');
-    const request = objectStore.put({ month: monthKey, ...data });
+    const request = objectStore.put(data);
     request.onsuccess = function() {
-        console.log(`Data for ${monthKey} saved successfully.`);
+        console.log(`Data for ${data.month} saved successfully.`);
     };
     request.onerror = function(event) {
         console.error('Error saving data:', event.target.errorCode);
@@ -149,39 +134,70 @@ function saveMonthData(monthKey, data) {
 
 // Get data from IndexedDB
 function getMonthData(monthKey, callback) {
-    if (!db) {
-        console.error('Database is not initialized');
-        return;
-    }
     const transaction = db.transaction(['habits'], 'readonly');
     const objectStore = transaction.objectStore('habits');
     const request = objectStore.get(monthKey);
     request.onsuccess = function(event) {
-        callback(event.target.result ? event.target.result : {});
+        callback(event.target.result);
     };
     request.onerror = function(event) {
-        console.error('Error getting data:', event.target.errorCode);
+        console.error('Error fetching data:', event.target.errorCode);
+        callback(null);
     };
 }
 
-// Toggle habit completion
-function toggleHabitCompletion(year, month, day, habitName, element) {
-    console.debug('Toggling habit:', habitName, 'for day:', day);
-    element.classList.toggle('completed');
-    const monthKey = `${year}-${month}`;
-    getMonthData(monthKey, (monthData) => {
-        const updatedData = monthData || {};
-        updatedData[`${day}-${habitName}`] = element.classList.contains('completed');
-        saveMonthData(monthKey, updatedData);
+// Load habit data and update UI
+function loadHabitData(year, month, day, hexagon) {
+    const monthKey = `${year}-${month + 1}`;
+    getMonthData(monthKey, (data) => {
+        if (data && data.days && data.days[day]) {
+            habits.forEach(habit => {
+                const habitState = data.days[day][habit.name];
+                const habitDiv = hexagon.querySelector(`.habit.${habit.name}`);
+                if (habitState) {
+                    habitDiv.classList.add('completed');
+                } else {
+                    habitDiv.classList.remove('completed');
+                }
+            });
+        }
     });
 }
 
-
-document.addEventListener('click', (event) => {
-    const settingsModal = document.getElementById('settings-modal');
-    if (settingsModal && event.target === settingsModal) {
-        settingsModal.style.display = 'none';
-    }
+// Add scroll position saving
+window.addEventListener('scroll', () => {
+    localStorage.setItem('scrollPosition', window.scrollY);
 });
 
-// Rest of original app.js content remains unchanged
+// Add PWA install functionality
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent the mini-infobar from appearing on mobile
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e;
+    // Update UI to show the install button
+    const installButton = document.getElementById('install-button');
+    installButton.style.display = 'block';
+
+    installButton.addEventListener('click', () => {
+        // Hide the install button
+        installButton.style.display = 'none';
+        // Show the install prompt
+        deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            } else {
+                console.log('User dismissed the install prompt');
+            }
+            deferredPrompt = null;
+        });
+    });
+});
+
+window.addEventListener('appinstalled', () => {
+    console.log('PWA installed successfully!');
+});
