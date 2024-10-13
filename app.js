@@ -32,32 +32,32 @@ const currentMonth = today.getMonth(); // 0-indexed
 
 // Initialize Calendar for 6 months (5 past months + current month)
 function initializeCalendar() {
-    console.debug('Initializing calendar...');
-    const calendarGrid = document.getElementById('calendar-grid');
-    for (let i = 5; i >= 0; i--) {
-        const date = new Date(currentYear, currentMonth - i, 1);
-        const month = date.getMonth();
-        const year = date.getFullYear();
-        const monthName = date.toLocaleString('default', { month: 'long' });
-        const monthElement = document.createElement('div');
-        monthElement.classList.add('month');
-        if (month === currentMonth && year === currentYear) {
-            monthElement.id = 'current-month';
-        }
-        const monthHeader = document.createElement('div');
-        monthHeader.classList.add('month-header');
-        monthHeader.textContent = `${monthName} ${year}`;
-        const daysGrid = document.createElement('div');
-        daysGrid.classList.add('days-grid');
-        monthElement.appendChild(monthHeader);
-        monthElement.appendChild(daysGrid);
-        calendarGrid.appendChild(monthElement);
-        console.debug('Populating days for:', year, month + 1);
-        populateDays(month, year, daysGrid);
-    }
+console.debug('Initializing calendar...');
+const calendarGrid = document.getElementById('calendar-grid');
+for (let i = 5; i >= 0; i--) {
+const date = new Date(currentYear, currentMonth - i, 1);
+const month = date.getMonth();
+const year = date.getFullYear();
+const monthName = date.toLocaleString('default', { month: 'long' });
+const monthElement = document.createElement('div');
+monthElement.classList.add('month');
+if (month === currentMonth && year === currentYear) {
+monthElement.id = 'current-month';
+}
+const monthHeader = document.createElement('div');
+monthHeader.classList.add('month-header');
+monthHeader.textContent = `${monthName} ${year}`;
+const daysGrid = document.createElement('div');
+daysGrid.classList.add('days-grid');
+monthElement.appendChild(monthHeader);
+monthElement.appendChild(daysGrid);
+calendarGrid.appendChild(monthElement);
+console.debug('Populating days for:', year, month + 1);
+populateDays(month, year, daysGrid);
+}
 
-    // Restore scroll position after calendar is rendered
-    setTimeout(() => {
+// Restore scroll position after calendar is rendered
+setTimeout(() => {
         const scrollPosition = localStorage.getItem('scrollPosition');
         if (scrollPosition !== null) {
             window.scrollTo({
