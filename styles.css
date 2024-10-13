@@ -195,10 +195,13 @@ header {
 }
 
 .gear-icon svg {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     fill: white;
+    display: block;
+    margin: 0 auto;
 }
+
 
 .gear-icon:hover {
     background-color: #388E3C;
