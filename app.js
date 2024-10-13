@@ -78,7 +78,7 @@ function initializeCalendar() {
     }, 100); // Delay to ensure rendering is complete
 }
 
-// Rest of original app.js content
+// Populate days for a given month and year (rest of original content)
 month, year, container) {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     for (let day = 1; day <= daysInMonth; day++) {
