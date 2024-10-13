@@ -182,9 +182,12 @@ header h1 {
 
 #calendar-grid.pentagon-grid .day-cell {
     background-color: #2a3b42;
+    position: relative;
+    padding-bottom: 100%; /* Keep square ratio */
 }
 
 .pentagon {
+    position: absolute;
     width: 100%;
     height: 100%;
     clip-path: polygon(
@@ -196,22 +199,31 @@ header h1 {
     );
     display: flex;
     flex-direction: column;
+    background-color: #445a4d; /* Dark base color */
 }
 
-.triangle-1 {
-    background-color: #292c33;
+.pentagon div {
+    flex: 1;
+    transition: background-color 0.3s;
 }
-.triangle-2 {
-    background-color: #313e35;
-}
-.triangle-3 {
-    background-color: #b14b34;
-}
-.triangle-4 {
-    background-color: #e86726;
-}
-.triangle-5 {
-    background-color: #fe9b33;
+
+/* Style the pentagon triangles */
+.triangle-1 { background-color: #292c33; }
+.triangle-2 { background-color: #313e35; }
+.triangle-3 { background-color: #b14b34; }
+.triangle-4 { background-color: #e86726; }
+.triangle-5 { background-color: #fe9b33; }
+
+/* Ensure that the day number is visible inside the pentagon */
+.pentagon .day-number {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 2px;
+    border-radius: 4px;
+    font-size: 12px;
 }
 
 /* Hexagon view (default) */
