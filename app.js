@@ -206,44 +206,46 @@ window.addEventListener('appinstalled', () => {
 document.getElementById('toggle-switch').addEventListener('change', (event) => {
     const selectedView = event.target.value;
     const calendarGrid = document.getElementById('calendar-grid');
+    const header = document.querySelector('header');
 
     if (selectedView === 'pentagon') {
-        // Switch to pentagon view
+        // Switch to pentagon view and apply dark theme
         document.body.classList.remove('hexagon-theme');
         document.body.classList.add('pentagon-theme');
         calendarGrid.classList.remove('hexagon-grid');
         calendarGrid.classList.add('pentagon-grid');
-        renderPentagonGrid();
+        header.classList.add('pentagon-theme');
+        renderPentagonGrid();  // Render pentagons
     } else {
-        // Switch to hexagon view
+        // Switch back to hexagon view and revert to light theme
         document.body.classList.remove('pentagon-theme');
         document.body.classList.add('hexagon-theme');
         calendarGrid.classList.remove('pentagon-grid');
         calendarGrid.classList.add('hexagon-grid');
-        initializeCalendar(); // Re-render hexagon view
+        header.classList.remove('pentagon-theme');
+        initializeCalendar();  // Re-render hexagon view
     }
 });
 
-// Function to render the pentagon grid
+// Render pentagon grid
 function renderPentagonGrid() {
     const calendarGrid = document.getElementById('calendar-grid');
     calendarGrid.innerHTML = ''; // Clear the grid
 
-    // Render pentagon days (example code)
     for (let i = 1; i <= 31; i++) {
         const dayCell = document.createElement('div');
         dayCell.classList.add('day-cell');
         const pentagon = document.createElement('div');
         pentagon.classList.add('pentagon');
 
-        // Create triangles inside pentagon
+        // Create triangles inside the pentagon
         for (let j = 1; j <= 5; j++) {
             const triangle = document.createElement('div');
             triangle.classList.add(`triangle-${j}`);
             pentagon.appendChild(triangle);
         }
 
-        // Add the day number
+        // Add day number
         const dayNumber = document.createElement('div');
         dayNumber.classList.add('day-number');
         dayNumber.textContent = i;
