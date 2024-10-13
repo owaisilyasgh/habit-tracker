@@ -67,6 +67,19 @@ function initializeCalendar() {
         }
     }, 100); // Delay to ensure rendering is complete
 }
+
+// Remaining original app.js content
+ after calendar is rendered
+    setTimeout(() => {
+        const scrollPosition = localStorage.getItem('scrollPosition');
+        if (scrollPosition !== null) {
+            window.scrollTo({
+                top: parseInt(scrollPosition),
+                behavior: 'smooth'
+            });
+        }
+    }, 100); // Delay to ensure rendering is complete
+}
  after calendar is rendered
     setTimeout(() => {
         const scrollPosition = localStorage.getItem('scrollPosition');

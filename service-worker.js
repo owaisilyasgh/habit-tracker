@@ -1,4 +1,6 @@
 
+const CACHE_NAME = 'habit-tracker-cache-v4';
+
 // Install the Service Worker
 self.addEventListener('install', event => {
     console.info('Service Worker installing...');
