@@ -29,4 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         console.error('Required modal elements not found.');
     }
+
+    // Initialize the calendar (restore main content)
+    initializeCalendar();
 });
