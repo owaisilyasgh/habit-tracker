@@ -180,45 +180,60 @@ header h1 {
     color: #fff;
 }
 
-#calendar-grid.pentagon-grid .day-cell {
+/* Circle with 5 Wedges (for Group Activity 2) */
+#calendar-grid.circle-grid .day-cell {
     background-color: #2a3b42;
     position: relative;
-    padding-bottom: 100%; /* Ensure square ratio */
-    overflow: hidden; /* Ensure the pentagon fits inside */
+    padding-bottom: 100%; /* Keep square ratio */
+    overflow: hidden;
 }
 
-.pentagon {
+.circle {
     position: absolute;
-    width: 70%; /* Reduce width to fit properly */
-    height: 70%; /* Reduce height to fit properly */
-    top: 15%; /* Center vertically */
-    left: 15%; /* Center horizontally */
-    clip-path: polygon(
-        50% 0%, 
-        100% 38%, 
-        82% 100%, 
-        18% 100%, 
-        0% 38%
-    );
-    display: flex;
-    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%; /* Make it a circle */
+    background-color: #445a4d; /* Dark base color */
+    position: relative;
 }
 
-.pentagon div {
-    flex: 1;
+.circle div {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    clip-path: polygon(50% 50%, 100% 0%, 100% 100%);
+    transform-origin: 50% 50%;
+    background-color: #ccc; /* Default color for wedges */
     transition: background-color 0.3s;
 }
 
+.wedge-1 {
+    transform: rotate(0deg);
+    background-color: #292c33;
+}
 
-/* Style the pentagon triangles */
-.triangle-1 { background-color: #292c33; }
-.triangle-2 { background-color: #313e35; }
-.triangle-3 { background-color: #b14b34; }
-.triangle-4 { background-color: #e86726; }
-.triangle-5 { background-color: #fe9b33; }
+.wedge-2 {
+    transform: rotate(72deg);
+    background-color: #313e35;
+}
 
-/* Ensure that the day number is visible inside the pentagon */
-.pentagon .day-number {
+.wedge-3 {
+    transform: rotate(144deg);
+    background-color: #b14b34;
+}
+
+.wedge-4 {
+    transform: rotate(216deg);
+    background-color: #e86726;
+}
+
+.wedge-5 {
+    transform: rotate(288deg);
+    background-color: #fe9b33;
+}
+
+/* Ensure that the day number is visible inside the circle */
+.circle .day-number {
     position: absolute;
     top: 5px;
     left: 5px;
