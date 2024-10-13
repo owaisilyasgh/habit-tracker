@@ -1,137 +1,51 @@
-/* styles.css */
 
-/* Basic Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
-    padding: 20px;
-    overflow-y: auto; /* Ensure body can scroll */
-}
-
-header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-#calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 20px;
-}
-
-.month {
-    background-color: #ffffff;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.month-header {
-    text-align: center;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-.days-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-gap: 10px;
-}
-
-.day-cell {
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%; /* Square */
-    cursor: pointer;
-}
-
-.hexagon {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    clip-path: polygon(
-        25% 5%, 
-        75% 5%, 
-        100% 50%, 
-        75% 95%, 
-        25% 95%, 
-        0% 50%
-    );
-    display: flex;
-    flex-direction: column;
-}
-
-.habit {
-    flex: 1;
-    border: 1px solid #ccc;
-    transition: background-color 0.3s;
-}
-
-.habit.exercise {
-    background-color: lightblue;
-}
-
-.habit.walking {
-    background-color: lightgreen;
-}
-
-.habit.exercise.completed {
-    background-color: blue;
-}
-
-.habit.walking.completed {
-    background-color: green;
-}
-
-.day-number {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    font-size: 12px;
-    background-color: rgba(255, 255, 255, 0.7);
-    padding: 2px 4px;
-    border-radius: 4px;
-}
-
-#install-button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.gear-icon {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    display: none; /* Initially hidden */
+    background-color: #4CAF50;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1001; /* Higher than modal */
 }
 
-@media (max-width: 1200px) {
-    #calendar-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+.gear-icon svg {
+    width: 27.6px;
+    height: 27.6px;
+    fill: white;
 }
 
-@media (max-width: 800px) {
-    #calendar-grid {
-        grid-template-columns: 1fr;
-    }
+.gear-icon:hover {
+    background-color: #388E3C;
 }
 
-@media (max-width: 600px) {
-    .days-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
 }
 
-@media (max-width: 400px) {
-    .days-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
 }
