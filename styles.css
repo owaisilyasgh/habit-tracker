@@ -15,8 +15,27 @@ body {
 }
 
 header {
-    text-align: center;
-    margin-bottom: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff; /* Light theme for hexagon view */
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#view-toggle {
+    display: flex;
+    align-items: center;
+}
+
+#toggle-switch {
+    margin-left: 10px;
+    padding: 5px;
 }
 
 #calendar-grid {
@@ -134,4 +153,49 @@ header {
     .days-grid {
         grid-template-columns: repeat(3, 1fr);
     }
+}
+
+/* Dark theme styles for the pentagon view */
+body.pentagon-theme {
+    background-color: #212226;
+    color: #fff;
+}
+
+#calendar-grid.pentagon-grid .day-cell {
+    background-color: #2a3b42;
+}
+
+.pentagon {
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(
+        50% 0%, 
+        100% 38%, 
+        82% 100%, 
+        18% 100%, 
+        0% 38%
+    );
+    display: flex;
+    flex-direction: column;
+}
+
+.triangle-1 {
+    background-color: #292c33;
+}
+.triangle-2 {
+    background-color: #313e35;
+}
+.triangle-3 {
+    background-color: #b14b34;
+}
+.triangle-4 {
+    background-color: #e86726;
+}
+.triangle-5 {
+    background-color: #fe9b33;
+}
+
+/* Hexagon view (default) */
+body.hexagon-theme {
+    background-color: #f0f2f5;
 }
