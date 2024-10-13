@@ -11,7 +11,7 @@
 }
 
 .gear-icon svg {
-    width: 27.6px;
+    width: 27.6px; /* 15% larger than original */
     height: 27.6px;
     fill: white;
 }
@@ -37,8 +37,8 @@
     background-color: white;
     padding: 20px;
     border-radius: 10px;
-    width: 80%;
-    max-width: 400px;
+    width: 90%;  /* Modal size increased for better visibility */
+    max-width: 500px; /* Increased maximum width for larger screens */
     text-align: center;
 }
 
