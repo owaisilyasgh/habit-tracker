@@ -7,6 +7,11 @@
     box-sizing: border-box;
 }
 
+/* Add padding to avoid truncating the first month behind the title */
+main {
+    margin-top: 80px; /* Adjust this value as needed */
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f2f5;
@@ -155,9 +160,23 @@ header {
     }
 }
 
-/* Dark theme styles for the pentagon view */
+/* Dark theme for the pentagon view */
 body.pentagon-theme {
     background-color: #212226;
+    color: #fff;
+}
+
+header.pentagon-theme {
+    background-color: #2a3b42;
+    color: #fff;
+}
+
+header h1 {
+    color: inherit;
+}
+
+#view-toggle select {
+    background-color: #445a4d;
     color: #fff;
 }
 
