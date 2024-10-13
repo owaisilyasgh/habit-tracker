@@ -183,13 +183,16 @@ header h1 {
 #calendar-grid.pentagon-grid .day-cell {
     background-color: #2a3b42;
     position: relative;
-    padding-bottom: 100%; /* Keep square ratio */
+    padding-bottom: 100%; /* Ensure square ratio */
+    overflow: hidden; /* Ensure the pentagon fits inside */
 }
 
 .pentagon {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 70%; /* Reduce width to fit properly */
+    height: 70%; /* Reduce height to fit properly */
+    top: 15%; /* Center vertically */
+    left: 15%; /* Center horizontally */
     clip-path: polygon(
         50% 0%, 
         100% 38%, 
@@ -199,13 +202,13 @@ header h1 {
     );
     display: flex;
     flex-direction: column;
-    background-color: #445a4d; /* Dark base color */
 }
 
 .pentagon div {
     flex: 1;
     transition: background-color 0.3s;
 }
+
 
 /* Style the pentagon triangles */
 .triangle-1 { background-color: #292c33; }
