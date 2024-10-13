@@ -208,6 +208,9 @@ document.getElementById('toggle-switch').addEventListener('change', (event) => {
     const calendarGrid = document.getElementById('calendar-grid');
     const header = document.querySelector('header');
 
+    // Clear the existing grid before rendering the new view
+    calendarGrid.innerHTML = '';
+
     if (selectedView === 'pentagon') {
         // Switch to pentagon view and apply dark theme
         document.body.classList.remove('hexagon-theme');
@@ -226,6 +229,7 @@ document.getElementById('toggle-switch').addEventListener('change', (event) => {
         initializeCalendar();  // Re-render hexagon view
     }
 });
+
 
 // Render pentagon grid
 function renderPentagonGrid() {
