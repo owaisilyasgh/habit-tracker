@@ -20,4 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
             settingsModal.style.display = 'none'; // Hide if clicking outside modal content
         }
     });
+
+    // Initialize Calendar function to restore the main screen content
+    initializeCalendar();
 });
