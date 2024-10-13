@@ -48,6 +48,7 @@ function initializeCalendar() {
         const date = new Date(currentYear, currentMonth - i, 1);
         const month = date.getMonth();
         const year = date.getFullYear();
+        const monthKey = `${year}-${month}`;
         const monthName = date.toLocaleString('default', { month: 'long' });
         const monthElement = document.createElement('div');
         monthElement.classList.add('month');
@@ -63,7 +64,9 @@ function initializeCalendar() {
         monthElement.appendChild(daysGrid);
         calendarGrid.appendChild(monthElement);
         console.debug('Populating days for:', year, month + 1);
-        populateDays(month, year, daysGrid);
+        getMonthData(monthKey, (data) => {
+            populateDays(month, year, daysGrid, data);
+        });
     }
 
     // Restore scroll position after calendar is rendered
@@ -79,7 +82,7 @@ function initializeCalendar() {
 }
 
 // Populate days for a given month and year
-function populateDays(month, year, container) {
+function populateDays(month, year, container, monthData) {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     for (let day = 1; day <= daysInMonth; day++) {
         const dayCell = document.createElement('div');
@@ -92,6 +95,9 @@ function populateDays(month, year, container) {
             const habitDiv = document.createElement('div');
             habitDiv.classList.add('habit', habit.name);
             habitDiv.dataset.habit = habit.name;
+            if (monthData && monthData[`${day}-${habit.name}`]) {
+                habitDiv.classList.add('completed');
+            }
             habitDiv.addEventListener('click', (e) => {
                 e.stopPropagation();
                 toggleHabitCompletion(year, month, day, habit.name, habitDiv);
@@ -108,23 +114,20 @@ function populateDays(month, year, container) {
         dayCell.appendChild(hexagon);
         dayCell.appendChild(dayNumber);
         container.appendChild(dayCell);
-
-        // Load saved data
-        loadHabitData(year, month, day, hexagon);
     }
 }
 
 // Save data to IndexedDB
-function saveMonthData(data) {
+function saveMonthData(monthKey, data) {
     if (!db) {
         console.error('Database is not initialized');
         return;
     }
     const transaction = db.transaction(['habits'], 'readwrite');
     const objectStore = transaction.objectStore('habits');
-    const request = objectStore.put(data);
+    const request = objectStore.put({ month: monthKey, ...data });
     request.onsuccess = function() {
-        console.log(`Data for ${data.month} saved successfully.`);
+        console.log(`Data for ${monthKey} saved successfully.`);
     };
     request.onerror = function(event) {
         console.error('Error saving data:', event.target.errorCode);
@@ -141,7 +144,7 @@ function getMonthData(monthKey, callback) {
     const objectStore = transaction.objectStore('habits');
     const request = objectStore.get(monthKey);
     request.onsuccess = function(event) {
-        callback(event.target.result);
+        callback(event.target.result ? event.target.result : {});
     };
     request.onerror = function(event) {
         console.error('Error getting data:', event.target.errorCode);
@@ -152,12 +155,28 @@ function getMonthData(monthKey, callback) {
 function toggleHabitCompletion(year, month, day, habitName, element) {
     console.debug('Toggling habit:', habitName, 'for day:', day);
     element.classList.toggle('completed');
-    // Further code to save changes
+    const monthKey = `${year}-${month}`;
+    getMonthData(monthKey, (monthData) => {
+        const updatedData = monthData || {};
+        updatedData[`${day}-${habitName}`] = element.classList.contains('completed');
+        saveMonthData(monthKey, updatedData);
+    });
 }
 
-// Load habit data into the calendar
-function loadHabitData(year, month, day, hexagon) {
-    // Placeholder for loading data
-}
+// Event listener for settings button to open modal
+document.getElementById('settings-button').addEventListener('click', () => {
+    const settingsModal = document.getElementById('settings-modal');
+    if (settingsModal) {
+        settingsModal.style.display = 'block';
+    }
+});
 
-// Rest of original content remains unchanged
+// Close modal when clicking outside or on the close button
+document.addEventListener('click', (event) => {
+    const settingsModal = document.getElementById('settings-modal');
+    if (settingsModal && event.target === settingsModal) {
+        settingsModal.style.display = 'none';
+    }
+});
+
+// Rest of original app.js content remains unchanged
