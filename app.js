@@ -220,6 +220,9 @@ function renderGroupActivity2Grid() {
             circle.appendChild(wedge);
         }
 
+        // Log for debugging
+        console.log(`Day ${i}: Circle with wedges created`);
+
         // Add day number
         const dayNumber = document.createElement('div');
         dayNumber.classList.add('day-number');
@@ -230,6 +233,7 @@ function renderGroupActivity2Grid() {
         calendarGrid.appendChild(dayCell);
     }
 }
+
 
 // Modify the toggle switch logic to reflect "Group Activity 2"
 document.getElementById('toggle-switch').addEventListener('change', (event) => {
