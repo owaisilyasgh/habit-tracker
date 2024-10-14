@@ -1,166 +1,28 @@
-/* styles.css */
-
-/* Basic Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Add padding to avoid truncating the first month behind the title */
-main {
-    margin-top: 80px; /* Adjust this value as needed */
-}
-
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f2f5;
     padding: 20px;
-    overflow-y: auto; /* Ensure body can scroll */
+    overflow-y: auto;
 }
 
-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #fff; /* Light theme for hexagon view */
-    z-index: 1000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-#view-toggle {
-    display: flex;
-    align-items: center;
-}
-
-#toggle-switch {
-    margin-left: 10px;
-    padding: 5px;
-}
-
+/* Calendar Grid */
 #calendar-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 20px;
+    margin-top: 20px;
 }
 
-.month {
-    background-color: #ffffff;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.month-header {
-    text-align: center;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-.days-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-gap: 10px;
-}
-
+/* Day Cells */
 .day-cell {
     position: relative;
     width: 100%;
-    padding-bottom: 100%; /* Square */
+    padding-bottom: 100%; /* Keep square ratio */
     cursor: pointer;
 }
 
-.hexagon {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    clip-path: polygon(
-        25% 5%, 
-        75% 5%, 
-        100% 50%, 
-        75% 95%, 
-        25% 95%, 
-        0% 50%
-    );
-    display: flex;
-    flex-direction: column;
-}
-
-.habit {
-    flex: 1;
-    border: 1px solid #ccc;
-    transition: background-color 0.3s;
-}
-
-.habit.exercise {
-    background-color: lightblue;
-}
-
-.habit.walking {
-    background-color: lightgreen;
-}
-
-.habit.exercise.completed {
-    background-color: blue;
-}
-
-.habit.walking.completed {
-    background-color: green;
-}
-
-.day-number {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    font-size: 12px;
-    background-color: rgba(255, 255, 255, 0.7);
-    padding: 2px 4px;
-    border-radius: 4px;
-}
-
-#install-button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    display: none; /* Initially hidden */
-}
-
-@media (max-width: 1200px) {
-    #calendar-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 800px) {
-    #calendar-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 600px) {
-    .days-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-@media (max-width: 400px) {
-    .days-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-/* Dark theme for the circle view */
+/* Dark Theme for Group Activity 2 */
 body.circle-theme {
     background-color: #212226;
     color: #fff;
@@ -182,23 +44,22 @@ header h1 {
 
 /* Circle with 5 Wedges (for Group Activity 2) */
 #calendar-grid.circle-grid .day-cell {
+    background-color: #2a3b42;
     position: relative;
     padding-bottom: 100%; /* Maintain square ratio */
-    background-color: #2a3b42;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Debugging visibility: Add a red border temporarily to make the circle visible */
-/* Debugging visibility: Add background colors to see the layout */
-/* Circle base */
+/* Circle */
 .circle {
     position: relative;
-    width: 80%;
-    height: 80%;
-    border-radius: 50%;
-    background-color: red; /* Debugging background color */
+    width: 80%;  /* Adjust width to fit inside the cell */
+    height: 80%; /* Adjust height to fit inside the cell */
+    border-radius: 50%;  /* Make it a circle */
+    background-color: red;  /* Debugging background color */
     z-index: 1;
     display: block;
 }
@@ -210,13 +71,15 @@ header h1 {
     height: 100%;
     clip-path: polygon(50% 50%, 100% 0%, 100% 100%); /* Define the wedge shape */
     transform-origin: 50% 50%;
+    background-color: blue; /* Debugging background color for visibility */
     z-index: 2;
+    display: block; /* Ensure the wedge is displayed */
 }
 
-/* Apply the wedge rotations and colors */
+/* Wedge-specific colors and rotation */
 .wedge-1 {
     transform: rotate(0deg);
-    background-color: #292c33; /* Apply the background */
+    background-color: #292c33;
 }
 
 .wedge-2 {
@@ -249,6 +112,26 @@ header h1 {
     padding: 2px;
     border-radius: 4px;
     font-size: 12px;
-    z-index: 3; /* Ensure day number is above everything */
+    z-index: 3; /* Ensure day number is on top */
 }
 
+/* Hexagon View (Unchanged, in case you still need it) */
+.hexagon-grid .day-cell {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    overflow: hidden;
+}
+
+.hexagon {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    background-color: lightblue;
+    transition: background-color 0.3s;
+}
+
+.hexagon:hover {
+    background-color: #f0a500;
+}
