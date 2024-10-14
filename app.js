@@ -245,21 +245,22 @@ document.getElementById('toggle-switch').addEventListener('change', (event) => {
     calendarGrid.innerHTML = '';
 
     if (selectedView === 'group-activity-2') {
-        // Switch to Group Activity 2 (Circle view) and apply dark theme
+        // Switch to Group Activity 2 (Circle view) and apply a new dark theme
         document.body.classList.remove('hexagon-theme');
-        document.body.classList.add('pentagon-theme'); // Reuse the dark theme
+        document.body.classList.add('circle-theme'); // Use circle-theme instead
         calendarGrid.classList.remove('hexagon-grid');
         calendarGrid.classList.add('circle-grid'); // New class for circle grid
-        header.classList.add('pentagon-theme');
+        header.classList.add('circle-theme'); // New class for header style in circle view
         renderGroupActivity2Grid();  // Render circles with 5 wedges
     } else {
         // Switch back to hexagon view and revert to light theme
-        document.body.classList.remove('pentagon-theme');
+        document.body.classList.remove('circle-theme');
         document.body.classList.add('hexagon-theme');
         calendarGrid.classList.remove('circle-grid');
         calendarGrid.classList.add('hexagon-grid');
-        header.classList.remove('pentagon-theme');
+        header.classList.remove('circle-theme');
         initializeCalendar();  // Re-render hexagon view
     }
 });
+
 
