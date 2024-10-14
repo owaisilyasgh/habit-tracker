@@ -160,13 +160,13 @@ header {
     }
 }
 
-/* Dark theme for the pentagon view */
-body.pentagon-theme {
+/* Dark theme for the circle view */
+body.circle-theme {
     background-color: #212226;
     color: #fff;
 }
 
-header.pentagon-theme {
+header.circle-theme {
     background-color: #2a3b42;
     color: #fff;
 }
@@ -181,7 +181,6 @@ header h1 {
 }
 
 /* Circle with 5 Wedges (for Group Activity 2) */
-/* Ensure proper grid layout for the circle view */
 #calendar-grid.circle-grid .day-cell {
     position: relative;
     padding-bottom: 100%; /* Maintain square ratio */
