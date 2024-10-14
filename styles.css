@@ -6,7 +6,7 @@ body {
     overflow-y: auto;
 }
 
-/* Calendar Grid */
+/* Calendar Grid (Base) */
 #calendar-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -22,27 +22,28 @@ body {
     cursor: pointer;
 }
 
-/* Dark Theme for Group Activity 2 */
-body.circle-theme {
-    background-color: #212226;
-    color: #fff;
+/* Hexagon View Styles (Restoring Original) */
+.hexagon-grid .day-cell {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    overflow: hidden;
 }
 
-header.circle-theme {
-    background-color: #2a3b42;
-    color: #fff;
+.hexagon {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    background-color: lightblue;
+    transition: background-color 0.3s;
 }
 
-header h1 {
-    color: inherit;
+.hexagon:hover {
+    background-color: #f0a500;
 }
 
-#view-toggle select {
-    background-color: #445a4d;
-    color: #fff;
-}
-
-/* Circle with 5 Wedges (for Group Activity 2) */
+/* Circle with Wedges (Group Activity 2) */
 #calendar-grid.circle-grid .day-cell {
     background-color: #2a3b42;
     position: relative;
@@ -53,30 +54,30 @@ header h1 {
     align-items: center;
 }
 
-/* Circle */
+/* Circle Base */
 .circle {
     position: relative;
-    width: 80%;  /* Adjust width to fit inside the cell */
-    height: 80%; /* Adjust height to fit inside the cell */
-    border-radius: 50%;  /* Make it a circle */
-    background-color: red;  /* Debugging background color */
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    background-color: red; /* Debugging background color */
     z-index: 1;
     display: block;
 }
 
-/* Ensure the wedges are positioned correctly */
+/* Wedges inside the circle */
 .circle div {
     position: absolute;
     width: 100%;
     height: 100%;
-    clip-path: polygon(50% 50%, 100% 0%, 100% 100%); /* Define the wedge shape */
+    clip-path: polygon(50% 50%, 100% 0%, 100% 100%); /* Create wedge shape */
     transform-origin: 50% 50%;
-    background-color: blue; /* Debugging background color for visibility */
+    background-color: blue; /* Debugging background color */
     z-index: 2;
-    display: block; /* Ensure the wedge is displayed */
+    display: block;
 }
 
-/* Wedge-specific colors and rotation */
+/* Wedge-specific colors and rotations */
 .wedge-1 {
     transform: rotate(0deg);
     background-color: #292c33;
@@ -102,7 +103,7 @@ header h1 {
     background-color: #fe9b33;
 }
 
-/* Ensure day numbers are still visible */
+/* Ensure the day numbers are visible */
 .circle .day-number {
     position: absolute;
     top: 5px;
@@ -115,23 +116,22 @@ header h1 {
     z-index: 3; /* Ensure day number is on top */
 }
 
-/* Hexagon View (Unchanged, in case you still need it) */
-.hexagon-grid .day-cell {
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%;
-    overflow: hidden;
+/* Dark Theme for Group Activity 2 */
+body.circle-theme {
+    background-color: #212226;
+    color: #fff;
 }
 
-.hexagon {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-    background-color: lightblue;
-    transition: background-color 0.3s;
+header.circle-theme {
+    background-color: #2a3b42;
+    color: #fff;
 }
 
-.hexagon:hover {
-    background-color: #f0a500;
+header h1 {
+    color: inherit;
+}
+
+#view-toggle select {
+    background-color: #445a4d;
+    color: #fff;
 }
