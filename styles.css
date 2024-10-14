@@ -191,13 +191,15 @@ header h1 {
     align-items: center;
 }
 
-/* Style the circle */
+/* Debugging visibility: Add a red border temporarily to make the circle visible */
 .circle {
     position: relative;
     width: 80%;  /* Adjust width to fit inside the cell */
     height: 80%; /* Adjust height to fit inside the cell */
     border-radius: 50%;  /* Make it a circle */
     background-color: #445a4d;  /* Base color of the circle */
+    border: 2px solid red; /* Temporary border for debugging */
+    z-index: 1; /* Ensure circle is above other elements */
     display: block;
 }
 
@@ -208,6 +210,7 @@ header h1 {
     height: 100%;
     clip-path: polygon(50% 50%, 100% 0%, 100% 100%); /* Create wedge shape */
     transform-origin: 50% 50%;
+    z-index: 2; /* Ensure the wedges are above the base circle */
 }
 
 .wedge-1 {
@@ -245,4 +248,6 @@ header h1 {
     padding: 2px;
     border-radius: 4px;
     font-size: 12px;
+    z-index: 3; /* Ensure day number is above everything */
 }
+
