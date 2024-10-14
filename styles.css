@@ -181,30 +181,33 @@ header h1 {
 }
 
 /* Circle with 5 Wedges (for Group Activity 2) */
+/* Ensure proper grid layout for the circle view */
 #calendar-grid.circle-grid .day-cell {
-    background-color: #2a3b42;
     position: relative;
-    padding-bottom: 100%; /* Keep square ratio */
-    overflow: hidden;
+    padding-bottom: 100%; /* Maintain square ratio */
+    background-color: #2a3b42;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* Style the circle */
 .circle {
+    position: relative;
+    width: 80%;  /* Adjust width to fit inside the cell */
+    height: 80%; /* Adjust height to fit inside the cell */
+    border-radius: 50%;  /* Make it a circle */
+    background-color: #445a4d;  /* Base color of the circle */
+    display: block;
+}
+
+/* Style the wedges */
+.circle div {
     position: absolute;
     width: 100%;
     height: 100%;
-    border-radius: 50%; /* Make it a circle */
-    background-color: #445a4d; /* Dark base color */
-    position: relative;
-}
-
-.circle div {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    clip-path: polygon(50% 50%, 100% 0%, 100% 100%);
+    clip-path: polygon(50% 50%, 100% 0%, 100% 100%); /* Create wedge shape */
     transform-origin: 50% 50%;
-    background-color: #ccc; /* Default color for wedges */
-    transition: background-color 0.3s;
 }
 
 .wedge-1 {
@@ -232,19 +235,14 @@ header h1 {
     background-color: #fe9b33;
 }
 
-/* Ensure that the day number is visible inside the circle */
+/* Ensure day numbers are still visible */
 .circle .day-number {
     position: absolute;
     top: 5px;
     left: 5px;
     color: white;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.5);
     padding: 2px;
     border-radius: 4px;
     font-size: 12px;
-}
-
-/* Hexagon view (default) */
-body.hexagon-theme {
-    background-color: #f0f2f5;
 }
