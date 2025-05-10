@@ -141,7 +141,6 @@ function render2HabitHexagonGrid(month, year, container) {
         dayCell.classList.add('day-cell');
         if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
             dayCell.id = 'current-day'; // Add ID for current day
-            dayCell.classList.add('current-day-animated'); // Add animation class
         }
 
         const hexagon = document.createElement('div');
@@ -177,7 +176,6 @@ function render6HabitHexagonGrid(month, year, container) {
         dayCell.classList.add('day-cell');
         if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
             dayCell.id = 'current-day'; // Add ID for current day
-            dayCell.classList.add('current-day-animated'); // Add animation class
         }
 
         const hexagon = document.createElement('div');
@@ -187,12 +185,11 @@ function render6HabitHexagonGrid(month, year, container) {
             const segmentDiv = document.createElement('div');
             segmentDiv.classList.add('segment', `segment-${index + 1}`, habit.name);
             segmentDiv.dataset.habit = habit.name;
+            segmentDiv.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleHabitCompletion(year, month, day, habit.name, segmentDiv);
+            });
             hexagon.appendChild(segmentDiv);
-        });
-
-        hexagon.addEventListener('click', () => {
-            const habitStates = Array.from(hexagon.querySelectorAll('.segment')).map(segment => segment.classList.contains('completed'));
-            openHabitModal(year, month, day, habitStates, hexagon);
         });
 
         const dayNumber = createDayNumberElement(day);
@@ -255,6 +252,7 @@ async function toggleHabitCompletion(year, month, day, habitName, element) {
 
 /**
  * Loads habit data for a specific day/view and updates the UI elements.
+ * Uses async/await for DB operations.
  */
 async function loadHabitDataForView(year, month, day, hexagonElement, habitArray) {
     const monthKey = `${year}-${month + 1}`;
@@ -315,59 +313,4 @@ export function restoreScrollPosition() {
             currentMonthElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }, 100);
-}
-
-// --- Modal ---
-function openHabitModal(year, month, day, habitStates, originalHexagon) {
-    const modal = document.createElement('div');
-    modal.classList.add('habit-modal');
-    modal.innerHTML = `
-        <div class="habit-modal-content">
-            <div class="hexagon-modal">
-                <div class="day-number">${day}</div>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(modal);
-     const calendarGrid = document.getElementById('calendar-grid');
-    if (calendarGrid) {
-        calendarGrid.classList.add('blur');
-    }
-
-    setTimeout(() => {
-        modal.classList.add('show');
-    }, 0);
-
-    const hexagonModal = modal.querySelector('.hexagon-modal');
-    hexagonModal.classList.add('hexagon-6');
-
-    habits6.forEach((habit, index) => {
-        const segmentDiv = document.createElement('div');
-        segmentDiv.classList.add('segment', `segment-${index + 1}`, habit.name);
-        segmentDiv.dataset.habit = habit.name;
-        if (habitStates[index]) {
-            segmentDiv.classList.add('completed');
-        }
-        segmentDiv.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleHabitCompletion(year, month, day, habit.name, segmentDiv);
-        });
-        hexagonModal.appendChild(segmentDiv);
-    });
-
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.classList.remove('show');
-            modal.addEventListener('transitionend', () => {
-                modal.remove();
-                renderView(currentView);
-                loadHabitDataForView(year, month, day, originalHexagon, habits6);
-                if (calendarGrid) {
-                    calendarGrid.classList.remove('blur');
-                }
-            }, {
-                once: true
-            });
-        }
-    });
 }

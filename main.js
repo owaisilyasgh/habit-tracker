@@ -46,6 +46,14 @@ function populateColorSchemeSelect(currentMode) {
     }
 }
 
+function loadColorSchemePreference() {
+    return localStorage.getItem('colorScheme') || DEFAULT_COLOR_SCHEME;
+}
+
+function saveColorSchemePreference(schemeName) {
+    localStorage.setItem('colorScheme', schemeName);
+}
+
 
 // --- PWA Installation ---
 let deferredPrompt;
@@ -95,6 +103,7 @@ function setupEventListeners() {
     if (darkModeSwitch) {
         darkModeSwitch.addEventListener('change', (event) => {
             const isDark = event.target.checked;
+            // const isDark = event.target.checked; // Removed duplicate declaration
             const newMode = isDark ? 'dark' : 'light';
             applyDarkMode(isDark); // Applies data-bs-theme
             saveDarkModePreference(isDark);
@@ -158,13 +167,10 @@ function detectServiceWorkerUpdate() {
 }
 
 function showUpdateButton() {
-    // Check if button already exists
-    if (document.getElementById('update-app-button')) return;
-
     const updateButton = document.createElement('button');
     updateButton.id = 'update-app-button';
     updateButton.textContent = 'Update App';
-    // Removed Bootstrap classes: 'btn', 'btn-primary', 'ms-2'
+    updateButton.classList.add('btn', 'btn-primary', 'ms-2'); // Bootstrap classes
     updateButton.addEventListener('click', () => {
         // Force reload to activate new service worker
         caches.keys().then(function(names) {
@@ -178,8 +184,12 @@ function showUpdateButton() {
         window.location.reload(true); // Force reload from server
     });
 
-    // Append to body instead of navbar
-    document.body.appendChild(updateButton);
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+        navbar.appendChild(updateButton);
+    } else {
+        console.warn('Navbar element not found, update button not added.');
+    }
 }
 
 

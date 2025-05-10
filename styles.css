@@ -7,67 +7,6 @@
     box-sizing: border-box;
 }
 
-/* Habit Modal Styles */
-.habit-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.habit-modal.show {
-    opacity: 1;
-}
-
-.habit-modal-content {
-    /* Make the outer container transparent and remove styling */
-    background-color: transparent;
-    box-shadow: none;
-    border-radius: 0;
-    padding: 0;
-    position: relative;
-    width: 300px; /* Keep size */
-    height: 300px; /* Keep size */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* overflow: hidden; removed */
-}
-
-/* Remove rule targeting hexagon inside content */
-
-.hexagon-modal {
-    /* Apply hexagon shape and background directly to inner container */
-    width: 100%;
-    height: 100%; /* Adjust size as needed */
-    position: relative;
-    margin: 0 auto; /* Center the hexagon */
-    clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
-    background-color: var(--bs-body-bg); /* Use theme background */
-}
-
-/* Remove duplicate .habit-modal rule */
-
-#calendar-grid.blur {
-    filter: blur(5px);
-}
-
-.habit-modal-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
-    cursor: pointer;
-}
-
 /* Keep basic reset */
 
 body {
@@ -78,11 +17,24 @@ body {
     transition: background-color 0.3s, color 0.3s; /* Smooth theme transition */
 }
 
+/* Remove old header styles, Navbar handles this */
+/* Remove old #view-toggle and #toggle-switch styles */
+
 #calendar-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 20px;
 }
+
+/* Remove .month styles - Replaced by .card */
+/*
+.month {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--bs-border-color);
+    background-color: var(--bs-body-bg);
+}
+*/
 
 .month-header { /* Keep styling for header text inside card-body */
     text-align: center;
@@ -262,6 +214,8 @@ body.color-scheme-dark-neon {
     pointer-events: none; /* Prevent interfering with clicks */
 }
 
+/* #install-button styles removed, using Bootstrap classes in HTML */
+
 
 /* --- Media Queries --- */
 
@@ -321,7 +275,18 @@ body.color-scheme-dark-neon {
     border: 1px solid #555; /* Slightly lighter dark border for visibility */
 }
 
+/* Remove redundant body.dark-mode rules if Bootstrap handles them */
+/* body.dark-mode { ... } */
+/* body.dark-mode header { ... } */
+/* body.dark-mode header h1 { ... } */
+/* body.dark-mode #view-toggle label, ... { ... } */
+/* body.dark-mode #toggle-switch, ... { ... } */
+
+/* Adjust grid layout for Bootstrap container padding */
 #calendar-grid {
+    /* grid-template-columns: repeat(3, 1fr); */ /* Keep this */
+    /* grid-gap: 20px; */ /* Keep this */
+    /* Maybe adjust gap slightly if needed with container padding */
 }
 
 
@@ -350,45 +315,4 @@ body.color-scheme-dark-neon {
     .days-grid {
         grid-template-columns: repeat(3, 1fr);
     }
-}
-
-.current-day-animated .hexagon-2,
-.current-day-animated .hexagon-6 {
-    animation: pulse 1s infinite alternate; /* Faster animation speed */
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    100% {
-        transform: scale(1.1);
-    }
-}
-
-/* --- Update Button Styling --- */
-#update-app-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 10000;
-    padding: 10px 15px;
-    background-color: #0d6efd; /* Bootstrap primary blue */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    text-align: center;
-    text-decoration: none;
-    vertical-align: middle;
-    transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-#update-app-button:hover {
-    background-color: #0b5ed7; /* Darker blue on hover */
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
 }
