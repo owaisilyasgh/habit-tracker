@@ -7,16 +7,75 @@
     box-sizing: border-box;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
-    padding: 20px;
-    overflow-y: auto; /* Ensure body can scroll */
+/* Habit Modal Styles */
+.habit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 20px;
+.habit-modal.show {
+    opacity: 1;
+}
+
+.habit-modal-content {
+    /* Make the outer container transparent and remove styling */
+    background-color: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+    position: relative;
+    width: 300px; /* Keep size */
+    height: 300px; /* Keep size */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* overflow: hidden; removed */
+}
+
+/* Remove rule targeting hexagon inside content */
+
+.hexagon-modal {
+    /* Apply hexagon shape and background directly to inner container */
+    width: 100%;
+    height: 100%; /* Adjust size as needed */
+    position: relative;
+    margin: 0 auto; /* Center the hexagon */
+    clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+    background-color: var(--bs-body-bg); /* Use theme background */
+}
+
+/* Remove duplicate .habit-modal rule */
+
+#calendar-grid.blur {
+    filter: blur(5px);
+}
+
+.habit-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Keep basic reset */
+
+body {
+    font-family: Arial, sans-serif; /* Keep font, Bootstrap handles rest */
+    /* background-color: #f0f2f5; */ /* Controlled by Bootstrap theme */
+    /* padding: 20px; */ /* Remove body padding, use Bootstrap containers */
+    overflow-y: auto; /* Ensure body can scroll */
+    transition: background-color 0.3s, color 0.3s; /* Smooth theme transition */
 }
 
 #calendar-grid {
@@ -25,17 +84,11 @@ header {
     grid-gap: 20px;
 }
 
-.month {
-    background-color: #ffffff;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.month-header {
+.month-header { /* Keep styling for header text inside card-body */
     text-align: center;
     margin-bottom: 10px;
     font-weight: bold;
+    color: var(--bs-body-color); /* Use Bootstrap text color */
 }
 
 .days-grid {
@@ -47,76 +100,230 @@ header {
 .day-cell {
     position: relative;
     width: 100%;
-    padding-bottom: 100%; /* Square */
+    padding-bottom: 100%; /* Maintain aspect ratio (makes it square-ish container) */
     cursor: pointer;
 }
 
-.hexagon {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    clip-path: polygon(
-        25% 5%, 
-        75% 5%, 
-        100% 50%, 
-        75% 95%, 
-        25% 95%, 
-        0% 50%
-    );
-    display: flex;
-    flex-direction: column;
+/* --- Color Scheme Definitions using CSS Variables --- */
+
+/* Default Light */
+body.color-scheme-light-default {
+    --habit1-on: #2196f3; --habit1-off: #bbdefb;
+    --habit2-on: #4caf50; --habit2-off: #c8e6c9;
+    --habit3-on: #673ab7; --habit3-off: #d1c4e9;
+    --habit4-on: #ffc107; --habit4-off: #ffecb3;
+    --habit5-on: #f44336; --habit5-off: #ffcdd2;
+    --habit6-on: #795548; --habit6-off: #d7ccc8;
+    --hexagon-bg: #eee;
 }
 
-.habit {
+/* Light Contrast */
+body.color-scheme-light-contrast {
+    --habit1-on: #2196f3; --habit1-off: #e9ecef;
+    --habit2-on: #4caf50; --habit2-off: #e9ecef;
+    --habit3-on: #673ab7; --habit3-off: #e9ecef;
+    --habit4-on: #ffc107; --habit4-off: #e9ecef;
+    --habit5-on: #f44336; --habit5-off: #e9ecef;
+    --habit6-on: #795548; --habit6-off: #e9ecef;
+    --hexagon-bg: #fff;
+}
+
+/* Light Pastel */
+body.color-scheme-light-pastel {
+    --habit1-on: #64b5f6; --habit1-off: #e9ecef;
+    --habit2-on: #81c784; --habit2-off: #e9ecef;
+    --habit3-on: #9575cd; --habit3-off: #e9ecef;
+    --habit4-on: #ffd54f; --habit4-off: #e9ecef;
+    --habit5-on: #e57373; --habit5-off: #e9ecef;
+    --habit6-on: #a1887f; --habit6-off: #e9ecef;
+    --hexagon-bg: #fff;
+}
+
+/* Dark Default */
+body.color-scheme-dark-default {
+    --habit1-on: #2196f3; --habit1-off: #4a6a8a;
+    --habit2-on: #4caf50; --habit2-off: #5f8a61;
+    --habit3-on: #673ab7; --habit3-off: #4a4a6a;
+    --habit4-on: #ffc107; --habit4-off: #8a7a4a;
+    --habit5-on: #f44336; --habit5-off: #8a5f5f;
+    --habit6-on: #795548; --habit6-off: #6a4a3a;
+    --hexagon-bg: #3a3a3a;
+}
+
+/* Dark Contrast */
+body.color-scheme-dark-contrast {
+    --habit1-on: #2196f3; --habit1-off: #495057;
+    --habit2-on: #4caf50; --habit2-off: #495057;
+    --habit3-on: #673ab7; --habit3-off: #495057;
+    --habit4-on: #ffc107; --habit4-off: #495057;
+    --habit5-on: #f44336; --habit5-off: #495057;
+    --habit6-on: #795548; --habit6-off: #495057;
+    --hexagon-bg: #2c2c2c;
+}
+
+/* Dark Neon */
+body.color-scheme-dark-neon {
+    --habit1-on: #29b6f6; --habit1-off: #343a40;
+    --habit2-on: #66bb6a; --habit2-off: #343a40;
+    --habit3-on: #7e57c2; --habit3-off: #343a40;
+    --habit4-on: #ffee58; --habit4-off: #343a40;
+    --habit5-on: #ef5350; --habit5-off: #343a40;
+    --habit6-on: #bcaaa4; --habit6-off: #343a40;
+    --hexagon-bg: #212529;
+}
+
+
+/* --- Styles for 2-Habit Hexagon View --- */
+
+.hexagon-2 {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+    display: flex;
+    flex-direction: column; /* Split vertically */
+    background-color: var(--hexagon-bg, #eee); /* Use variable with fallback */
+}
+
+.hexagon-2 .habit {
     flex: 1;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */ /* Use variable or remove if bg is enough */
+    border: 1px solid rgba(0,0,0,0.1); /* Subtle border */
     transition: background-color 0.3s;
 }
 
-.habit.exercise {
-    background-color: lightblue;
+/* Apply colors using variables */
+.hexagon-2 .habit.habit1 { background-color: var(--habit1-off); }
+.hexagon-2 .habit.habit1.completed { background-color: var(--habit1-on); }
+
+.hexagon-2 .habit.habit2 { background-color: var(--habit2-off); }
+.hexagon-2 .habit.habit2.completed { background-color: var(--habit2-on); }
+
+
+/* --- Styles for 6-Habit Hexagon View --- */
+
+.hexagon-6 {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+    background-color: var(--hexagon-bg, #eee); /* Use variable with fallback */
 }
 
-.habit.walking {
-    background-color: lightgreen;
+.hexagon-6 .segment {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-origin: 50% 50%;
+    transition: background-color 0.3s;
+    border: 1px solid rgba(0,0,0,0.1); /* Subtle border for segments */
 }
 
-.habit.exercise.completed {
-    background-color: blue;
-}
+/* Clip paths remain the same */
+.hexagon-6 .segment-1 { clip-path: polygon(50% 50%, 0% 50%, 25% 5%); }
+.hexagon-6 .segment-2 { clip-path: polygon(50% 50%, 25% 5%, 75% 5%); }
+.hexagon-6 .segment-3 { clip-path: polygon(50% 50%, 75% 5%, 100% 50%); }
+.hexagon-6 .segment-4 { clip-path: polygon(50% 50%, 100% 50%, 75% 95%); }
+.hexagon-6 .segment-5 { clip-path: polygon(50% 50%, 75% 95%, 25% 95%); }
+.hexagon-6 .segment-6 { clip-path: polygon(50% 50%, 25% 95%, 0% 50%); }
 
-.habit.walking.completed {
-    background-color: green;
-}
+/* Apply colors using variables */
+.hexagon-6 .segment.habit1 { background-color: var(--habit1-off); }
+.hexagon-6 .segment.habit1.completed { background-color: var(--habit1-on); }
+.hexagon-6 .segment.habit2 { background-color: var(--habit2-off); }
+.hexagon-6 .segment.habit2.completed { background-color: var(--habit2-on); }
+.hexagon-6 .segment.habit3 { background-color: var(--habit3-off); }
+.hexagon-6 .segment.habit3.completed { background-color: var(--habit3-on); }
+.hexagon-6 .segment.habit4 { background-color: var(--habit4-off); }
+.hexagon-6 .segment.habit4.completed { background-color: var(--habit4-on); }
+.hexagon-6 .segment.habit5 { background-color: var(--habit5-off); }
+.hexagon-6 .segment.habit5.completed { background-color: var(--habit5-on); }
+.hexagon-6 .segment.habit6 { background-color: var(--habit6-off); }
+.hexagon-6 .segment.habit6.completed { background-color: var(--habit6-on); }
+
+
+/* --- Common Styles --- */
 
 .day-number {
     position: absolute;
-    top: 2px;
-    left: 2px;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Fine-tune centering */
     font-size: 12px;
-    background-color: rgba(255, 255, 255, 0.7);
+    font-weight: bold;
+    /* color: #333; */ /* Use Bootstrap text color */
+    color: var(--bs-body-color);
+    background-color: rgba(var(--bs-body-bg-rgb), 0.7); /* Use Bootstrap bg with alpha */
     padding: 2px 4px;
     border-radius: 4px;
+    z-index: 10; /* Ensure it's above segments */
+    pointer-events: none; /* Prevent interfering with clicks */
 }
 
-#install-button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    display: none; /* Initially hidden */
-}
+
+/* --- Media Queries --- */
 
 @media (max-width: 1200px) {
     #calendar-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* --- Dark Mode Adjustments --- */
+
+/* Explicitly set body background and text color for dark theme */
+[data-bs-theme="dark"] body {
+    background-color: var(--bs-dark-bg-subtle, #1a1a1a); /* Use BS variable or fallback */
+    color: var(--bs-body-color, #e0e0e0);
+}
+
+/* Explicitly set navbar background for dark theme */
+[data-bs-theme="dark"] .navbar {
+     background-color: var(--bs-tertiary-bg, #2c2c2c) !important; /* Use BS variable or fallback, !important might be needed */
+     border-bottom-color: var(--bs-border-color-translucent, #444) !important;
+}
+
+/* Ensure toggler icon is visible in dark mode */
+[data-bs-theme="dark"] .navbar-toggler-icon {
+     filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Ensure navbar text elements use the correct color */
+[data-bs-theme="dark"] .navbar-brand,
+[data-bs-theme="dark"] .form-label,
+[data-bs-theme="dark"] .form-check-label {
+    color: var(--bs-body-color, #e0e0e0) !important;
+}
+
+/* Ensure form elements in navbar use dark theme */
+[data-bs-theme="dark"] .form-select,
+[data-bs-theme="dark"] .form-check-input {
+     background-color: var(--bs-secondary-bg, #3a3a3a);
+     color: var(--bs-body-color, #e0e0e0);
+     border-color: var(--bs-border-color-translucent, #555);
+}
+[data-bs-theme="dark"] .form-check-input:checked {
+     background-color: var(--bs-primary); /* Use primary color for checked state */
+     border-color: var(--bs-primary);
+}
+
+/* Ensure custom day number background contrasts well in dark mode */
+[data-bs-theme="dark"] .day-number {
+    background-color: rgba(var(--bs-light-rgb), 0.7); /* Use light color for background */
+    color: var(--bs-dark); /* Use dark color for text */
+}
+
+/* Optional: Adjust habit/segment borders in dark mode */
+[data-bs-theme="dark"] .hexagon-2 .habit,
+[data-bs-theme="dark"] .hexagon-6 .segment {
+    border: 1px solid #555; /* Slightly lighter dark border for visibility */
+}
+
+#calendar-grid {
+}
+
 
 @media (max-width: 800px) {
     #calendar-grid {
@@ -128,10 +335,60 @@ header {
     .days-grid {
         grid-template-columns: repeat(4, 1fr);
     }
+    .day-number {
+        font-size: 10px; /* Smaller font on small screens */
+    }
+}
+
+#current-day .hexagon-2,
+#current-day .hexagon-6 {
+    border-width: 4px; /* Make border bolder */
+    /* border-color: #your- 강조-color;  Optionally change border color */
 }
 
 @media (max-width: 400px) {
     .days-grid {
         grid-template-columns: repeat(3, 1fr);
     }
+}
+
+.current-day-animated .hexagon-2,
+.current-day-animated .hexagon-6 {
+    animation: pulse 1s infinite alternate; /* Faster animation speed */
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+/* --- Update Button Styling --- */
+#update-app-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10000;
+    padding: 10px 15px;
+    background-color: #0d6efd; /* Bootstrap primary blue */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+#update-app-button:hover {
+    background-color: #0b5ed7; /* Darker blue on hover */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
 }

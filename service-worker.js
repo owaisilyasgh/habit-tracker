@@ -1,11 +1,12 @@
 // service-worker.js
+// Version: 2.0
 
-const CACHE_NAME = 'habit-tracker-cache-v4';
+const CACHE_NAME = 'habit-tracker-cache-v6';
 const urlsToCache = [
     '/habit-tracker/',
     '/habit-tracker/index.html',
     '/habit-tracker/styles.css',
-    '/habit-tracker/app.js',
+    '/habit-tracker/ui.js',
     '/habit-tracker/manifest.json'
 ];
 
@@ -13,41 +14,29 @@ const urlsToCache = [
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
-        .then(cache => {
-            return cache.addAll(urlsToCache);
-        })
+            .then(cache => {
+                return cache.addAll(urlsToCache);
+            })
     );
 });
 
-// Activate the Service Worker
 self.addEventListener('activate', event => {
-    const cacheWhitelist = [CACHE_NAME];
-    event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (!cacheWhitelist.includes(cacheName)) {
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        })
-    );
+  event.waitUntil(self.clients.claim());
 });
 
 // Fetch and respond with cached resources or fetch from network
 self.addEventListener('fetch', event => {
-    if (event.request.mode === 'navigate') {
-        event.respondWith(
-            caches.match('/habit-tracker/index.html').then(response => {
-                return response || fetch('/habit-tracker/index.html');
-            })
-        );
-    } else {
-        event.respondWith(
-            caches.match(event.request).then(response => {
+    event.respondWith(
+        caches.match(event.request)
+            .then(response => {
                 return response || fetch(event.request);
             })
-        );
+    );
+});
+
+// Listen for message from client
+self.addEventListener('message', event => {
+    if (event.data && event.data.type === 'SKIP_WAITING') {
+        self.skipWaiting();
     }
 });
