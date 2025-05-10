@@ -3,11 +3,11 @@
 
 const CACHE_NAME = 'habit-tracker-cache-v6';
 const urlsToCache = [
-    '/habit-tracker/',
-    '/habit-tracker/index.html',
-    '/habit-tracker/styles.css',
-    '/habit-tracker/ui.js',
-    '/habit-tracker/manifest.json'
+    '/',
+    '/index.html',
+    '/styles.css',
+    '/ui.js',
+    '/manifest.json'
 ];
 
 // Install the Service Worker
