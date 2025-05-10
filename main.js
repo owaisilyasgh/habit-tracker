@@ -7,7 +7,8 @@ import {
     applyColorScheme, // Import apply function
     applyDarkMode,
     loadDarkModePreference,
-    saveDarkModePreference
+    saveDarkModePreference, // This was the dark mode one
+    saveColorSchemePreference // Need to import the color scheme one too
 } from './ui.js';
 
 // --- DOM Element References ---
@@ -15,6 +16,7 @@ const viewToggleSwitch = document.getElementById('toggle-switch');
 const darkModeSwitch = document.getElementById('dark-mode-switch');
 const colorSchemeSelect = document.getElementById('color-scheme-select'); // Get scheme select
 const installButton = document.getElementById('install-button');
+const forceUpdateButton = document.getElementById('force-update-button'); // Get force update button
 
 // --- Color Scheme Logic ---
 const DEFAULT_LIGHT_SCHEME = 'light-default';
@@ -44,14 +46,6 @@ function populateColorSchemeSelect(currentMode) {
         // Otherwise, set to default for the current mode
         colorSchemeSelect.value = currentMode === 'dark' ? DEFAULT_DARK_SCHEME : DEFAULT_LIGHT_SCHEME;
     }
-}
-
-function loadColorSchemePreference() {
-    return localStorage.getItem('colorScheme') || DEFAULT_COLOR_SCHEME;
-}
-
-function saveColorSchemePreference(schemeName) {
-    localStorage.setItem('colorScheme', schemeName);
 }
 
 
@@ -103,10 +97,9 @@ function setupEventListeners() {
     if (darkModeSwitch) {
         darkModeSwitch.addEventListener('change', (event) => {
             const isDark = event.target.checked;
-            // const isDark = event.target.checked; // Removed duplicate declaration
             const newMode = isDark ? 'dark' : 'light';
             applyDarkMode(isDark); // Applies data-bs-theme
-            saveDarkModePreference(isDark);
+            saveDarkModePreference(isDark); // Correctly uses dark mode save
 
             // Repopulate and select default scheme for the new mode
             populateColorSchemeSelect(newMode);
@@ -136,6 +129,54 @@ function setupEventListeners() {
     window.addEventListener('scroll', () => {
         localStorage.setItem('scrollPosition', window.scrollY);
     });
+
+    // Force Update Button
+    if (forceUpdateButton) {
+        forceUpdateButton.addEventListener('click', () => {
+            console.log('Checking for updates...');
+            forceUpdateButton.textContent = 'Checking...';
+            forceUpdateButton.disabled = true;
+            navigator.serviceWorker.getRegistration()
+                .then(reg => {
+                    if (reg) {
+                        return reg.update(); // Attempt to update the service worker
+                    } else {
+                        console.log('No active service worker registration found.');
+                        return Promise.reject('No registration'); // Indicate no registration
+                    }
+                })
+                .then(() => {
+                    // Check if an update was found and is waiting after the update check
+                    return navigator.serviceWorker.getRegistration();
+                })
+                .then(reg => {
+                     if (reg?.waiting) {
+                        console.log('Update found after check.');
+                        // Optionally show the update button immediately if it wasn't already visible
+                        showUpdateButton();
+                        forceUpdateButton.textContent = 'Update Found!';
+                    } else {
+                        console.log('No update found after check.');
+                        forceUpdateButton.textContent = 'No Update Found';
+                    }
+                })
+                .catch(error => {
+                    if (error !== 'No registration') { // Avoid logging the specific rejection string
+                        console.error('Error checking for update:', error);
+                    }
+                    forceUpdateButton.textContent = 'Error Checking';
+                })
+                .finally(() => {
+                    // Re-enable button after a delay, reset text if no update found
+                    setTimeout(() => {
+                        if (forceUpdateButton.textContent !== 'Update Found!') {
+                             forceUpdateButton.textContent = 'Check for Updates';
+                        }
+                        forceUpdateButton.disabled = false;
+                    }, 2000); // Reset after 2 seconds
+                });
+        });
+    }
 }
 
 // --- Update Detection ---
@@ -167,10 +208,13 @@ function detectServiceWorkerUpdate() {
 }
 
 function showUpdateButton() {
+    // Check if button already exists
+    if (document.getElementById('update-app-button')) return;
+
     const updateButton = document.createElement('button');
     updateButton.id = 'update-app-button';
     updateButton.textContent = 'Update App';
-    updateButton.classList.add('btn', 'btn-primary', 'ms-2'); // Bootstrap classes
+    // Removed Bootstrap classes: 'btn', 'btn-primary', 'ms-2'
     updateButton.addEventListener('click', () => {
         // Force reload to activate new service worker
         caches.keys().then(function(names) {
@@ -184,12 +228,8 @@ function showUpdateButton() {
         window.location.reload(true); // Force reload from server
     });
 
-    const navbar = document.querySelector('.navbar');
-    if (navbar) {
-        navbar.appendChild(updateButton);
-    } else {
-        console.warn('Navbar element not found, update button not added.');
-    }
+    // Append to body instead of navbar
+    document.body.appendChild(updateButton);
 }
 
 

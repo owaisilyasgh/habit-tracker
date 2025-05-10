@@ -7,48 +7,37 @@
     <title>Habit Tracker PWA</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Custom CSS (Load after Bootstrap) -->
-    <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css"> <!-- Already relative -->
+    <!-- Icons & Manifest (Ensuring relative paths) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png"> <!-- Already relative -->
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png"> <!-- Already relative -->
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png"> <!-- Already relative -->
+    <link rel="icon" href="icons/favicon.ico"> <!-- Already relative -->
+    <link rel="manifest" href="manifest.json"> <!-- Already relative -->
     <meta name="theme-color" content="#4CAF50">
 </head>
 <body>
     <!-- Bootstrap Navbar -->
     <nav class="navbar navbar-expand-sm fixed-top bg-light border-bottom" data-bs-theme="light">
         <div class="container-fluid">
-            <a class="navbar-brand me-3" href="#">Habit Tracker</a>
-             <!-- View Toggle (Moved outside collapse) -->
-             <div class="d-flex align-items-center me-auto"> <!-- Use me-auto to push remaining items right -->
-                <label for="toggle-switch" class="form-label me-2 mb-0 small">View:</label>
-                <select id="toggle-switch" class="form-select form-select-sm" style="width: auto;"> <!-- Auto width -->
-                    <option value="2-habit-view">2-Habit</option> <!-- Shorter text -->
-                    <option value="6-habit-view">6-Habit</option> <!-- Shorter text -->
-                </select>
+            <a class="navbar-brand me-3" href="#">Habit Tracker</a> <!-- Adjusted margin -->
+            <!-- View Toggle (Moved back to header) -->
+            <div class="d-flex align-items-center me-auto"> <!-- Use me-auto to push settings icon right -->
+               <label for="toggle-switch" class="form-label me-2 mb-0 small">View:</label>
+               <select id="toggle-switch" class="form-select form-select-sm" style="width: auto;">
+                   <option value="2-habit-view">2-Habit</option>
+                   <option value="5-habit-view">5-Habit</option>
+                   <option value="6-habit-view">6-Habit</option>
+               </select>
            </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+            <!-- Settings Modal Trigger Button -->
+            <button class="btn btn-light" type="button" data-bs-toggle="modal" data-bs-target="#settings-modal" aria-label="Settings">
+                <i class="bi bi-gear-fill fs-5"></i> <!-- Settings Icon -->
             </button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <!-- Settings moved to the end -->
-                <ul class="navbar-nav ms-auto mb-2 mb-sm-0 align-items-center">
-                     <!-- Color Scheme Toggle -->
-                     <li class="nav-item px-2"> <!-- Added padding -->
-                        <div class="d-flex align-items-center">
-                             <label for="color-scheme-select" class="form-label me-2 mb-0 small">Scheme:</label>
-                             <select id="color-scheme-select" class="form-select form-select-sm">
-                                 <!-- Options will be populated by JS -->
-                             </select>
-                        </div>
-                    </li>
-                    <!-- Dark Mode Toggle -->
-                    <li class="nav-item ps-2"> <!-- Added padding (left only) -->
-                        <div class="form-check form-switch pt-1"> <!-- Added padding-top -->
-                            <input class="form-check-input" type="checkbox" role="switch" id="dark-mode-switch">
-                            <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+            <!-- Removed old collapse div -->
         </div>
     </nav>
 
@@ -58,6 +47,40 @@
          <!-- Install Button Placeholder (will be added via JS) -->
          <button id="install-button" class="btn btn-success position-fixed bottom-0 end-0 m-3" style="display: none;">Install App</button>
     </main>
+
+    <!-- Settings Modal -->
+    <div class="modal fade" id="settings-modal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="settingsModalLabel">Settings</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- View Toggle Removed from Modal -->
+                    <!-- Color Scheme Toggle -->
+                    <div class="mb-3 d-flex align-items-center">
+                         <label for="color-scheme-select" class="form-label me-2 mb-0">Scheme:</label>
+                         <select id="color-scheme-select" class="form-select form-select-sm">
+                             <!-- Options will be populated by JS -->
+                         </select>
+                    </div>
+                    <!-- Dark Mode Toggle -->
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="dark-mode-switch">
+                            <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between"> <!-- Align buttons -->
+                    <button type="button" id="force-update-button" class="btn btn-secondary btn-sm">Check for Updates</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!-- Main App Module -->

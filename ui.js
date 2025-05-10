@@ -1,6 +1,6 @@
 // ui.js - UI rendering and interaction logic
 
-import { habits2, habits6 } from './config.js';
+import { habits2, habits5, habits6 } from './config.js'; // Import habits5
 import { getMonthData, saveMonthData } from './db.js';
 
 // --- DOM Element References ---
@@ -43,6 +43,15 @@ export function saveDarkModePreference(isDark) {
 }
 
 // --- Color Scheme ---
+
+/**
+ * Saves the selected color scheme name to local storage.
+ * @param {string} schemeName - The key of the scheme to save.
+ */
+export function saveColorSchemePreference(schemeName) {
+    localStorage.setItem('colorScheme', schemeName);
+}
+
 /**
  * Applies the selected color scheme by adding the corresponding class to the body.
  * @param {string} schemeName - The key of the scheme (e.g., 'light-default').
@@ -76,6 +85,9 @@ export function renderView(viewType) {
     if (viewType === '2-habit-view') {
         calendarGrid.classList.add('hexagon-grid-2');
         renderMonths(render2HabitHexagonGrid);
+    } else if (viewType === '5-habit-view') { // Add 5-habit view case
+        calendarGrid.classList.add('pentagon-grid-5'); // Use pentagon class
+        renderMonths(render5HabitPentagonGrid);
     } else if (viewType === '6-habit-view') {
         calendarGrid.classList.add('hexagon-grid-6');
         renderMonths(render6HabitHexagonGrid);
@@ -141,6 +153,7 @@ function render2HabitHexagonGrid(month, year, container) {
         dayCell.classList.add('day-cell');
         if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
             dayCell.id = 'current-day'; // Add ID for current day
+            dayCell.classList.add('current-day-animated'); // Add animation class
         }
 
         const hexagon = document.createElement('div');
@@ -167,6 +180,44 @@ function render2HabitHexagonGrid(month, year, container) {
     container.appendChild(fragment);
 }
 
+/** Populates days for the 5-Habit View */
+function render5HabitPentagonGrid(month, year, container) {
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const fragment = document.createDocumentFragment();
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayCell = document.createElement('div');
+        dayCell.classList.add('day-cell');
+        if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+            dayCell.id = 'current-day'; // Add ID for current day
+            dayCell.classList.add('current-day-animated'); // Add animation class
+        }
+
+        const pentagon = document.createElement('div');
+        pentagon.classList.add('pentagon-5'); // Use pentagon class
+
+        habits5.forEach((habit, index) => { // Use habits5
+            const segmentDiv = document.createElement('div');
+            segmentDiv.classList.add('segment', `segment-${index + 1}`, habit.name);
+            segmentDiv.dataset.habit = habit.name;
+            pentagon.appendChild(segmentDiv);
+        });
+
+        pentagon.addEventListener('click', () => {
+            const habitStates = Array.from(pentagon.querySelectorAll('.segment')).map(segment => segment.classList.contains('completed'));
+            openHabitModal(year, month, day, habitStates, pentagon, habits5); // Pass habits5
+        });
+
+        const dayNumber = createDayNumberElement(day);
+        dayCell.appendChild(pentagon);
+        dayCell.appendChild(dayNumber);
+        fragment.appendChild(dayCell);
+
+        loadHabitDataForView(year, month, day, pentagon, habits5); // Use habits5
+    }
+    container.appendChild(fragment);
+}
+
+
 /** Populates days for the 6-Habit View */
 function render6HabitHexagonGrid(month, year, container) {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -176,6 +227,7 @@ function render6HabitHexagonGrid(month, year, container) {
         dayCell.classList.add('day-cell');
         if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
             dayCell.id = 'current-day'; // Add ID for current day
+            dayCell.classList.add('current-day-animated'); // Add animation class
         }
 
         const hexagon = document.createElement('div');
@@ -185,11 +237,12 @@ function render6HabitHexagonGrid(month, year, container) {
             const segmentDiv = document.createElement('div');
             segmentDiv.classList.add('segment', `segment-${index + 1}`, habit.name);
             segmentDiv.dataset.habit = habit.name;
-            segmentDiv.addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleHabitCompletion(year, month, day, habit.name, segmentDiv);
-            });
             hexagon.appendChild(segmentDiv);
+        });
+
+        hexagon.addEventListener('click', () => {
+            const habitStates = Array.from(hexagon.querySelectorAll('.segment')).map(segment => segment.classList.contains('completed'));
+            openHabitModal(year, month, day, habitStates, hexagon, habits6); // Pass habits6
         });
 
         const dayNumber = createDayNumberElement(day);
@@ -252,7 +305,6 @@ async function toggleHabitCompletion(year, month, day, habitName, element) {
 
 /**
  * Loads habit data for a specific day/view and updates the UI elements.
- * Uses async/await for DB operations.
  */
 async function loadHabitDataForView(year, month, day, hexagonElement, habitArray) {
     const monthKey = `${year}-${month + 1}`;
@@ -313,4 +365,64 @@ export function restoreScrollPosition() {
             currentMonthElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }, 100);
+}
+
+// --- Modal ---
+// Updated to handle different habit counts and shapes
+function openHabitModal(year, month, day, habitStates, originalShapeElement, habitArray) {
+    const modal = document.createElement('div');
+    modal.classList.add('habit-modal');
+    const shapeClass = habitArray.length === 5 ? 'pentagon-5' : 'hexagon-6'; // Determine shape class
+    modal.innerHTML = `
+        <div class="habit-modal-content">
+            <div class="shape-modal ${shapeClass}"> <!-- Use dynamic shape class -->
+                <div class="day-number">${day}</div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+     const calendarGrid = document.getElementById('calendar-grid');
+    if (calendarGrid) {
+        calendarGrid.classList.add('blur');
+    }
+
+    setTimeout(() => {
+        modal.classList.add('show');
+    }, 0);
+
+    const shapeModal = modal.querySelector('.shape-modal'); // Target the generic shape container
+
+    habitArray.forEach((habit, index) => { // Use the passed habitArray
+        const segmentDiv = document.createElement('div');
+        // Add base segment class, specific index class, and habit name class
+        segmentDiv.classList.add('segment', `segment-${index + 1}`, habit.name);
+        segmentDiv.dataset.habit = habit.name; // Store habit name for toggling
+        if (habitStates[index]) {
+            segmentDiv.classList.add('completed');
+        }
+        segmentDiv.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleHabitCompletion(year, month, day, habit.name, segmentDiv);
+        });
+        shapeModal.appendChild(segmentDiv); // Append to the shape container
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('show');
+            modal.addEventListener('transitionend', () => {
+                modal.remove();
+                // Removed renderView(currentView); to prevent flicker
+                // Reload data for the specific element that was clicked to update its segments
+                loadHabitDataForView(year, month, day, originalShapeElement, habitArray);
+                if (calendarGrid) {
+                    calendarGrid.classList.remove('blur');
+                }
+                // Instead of renderView, just remove modal and blur
+                // The underlying day cell should still reflect the toggled state
+            }, {
+                once: true
+            });
+        }
+    });
 }

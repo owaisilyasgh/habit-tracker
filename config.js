@@ -99,3 +99,9 @@ export const habits6 = [
     { name: 'habit1' }, { name: 'habit2' }, { name: 'habit3' },
     { name: 'habit4' }, { name: 'habit5' }, { name: 'habit6' }
 ];
+
+// Definition for the 5-Habit View
+export const habits5 = [
+    { name: 'habit1' }, { name: 'habit2' }, { name: 'habit3' },
+    { name: 'habit4' }, { name: 'habit5' }
+];
